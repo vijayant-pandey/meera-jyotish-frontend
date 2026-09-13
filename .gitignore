@@ -1,0 +1,56 @@
+# ---------------------------------------------------------------
+# Dependencies
+# ---------------------------------------------------------------
+node_modules/
+
+# ---------------------------------------------------------------
+# Secrets. Vite reads .env files; anything named VITE_* is baked
+# into the public bundle, so never put a real secret in one.
+# ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+
+# ---------------------------------------------------------------
+# Build output
+# ---------------------------------------------------------------
+dist/
+dist-ssr/
+coverage/
+
+# ---------------------------------------------------------------
+# TypeScript incremental build state
+# ---------------------------------------------------------------
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+tsconfig.node.tsbuildinfo
+
+# ---------------------------------------------------------------
+# Compiled output of the config files.
+# `tsc -b` emits these next to their .ts sources. They are NOT
+# source, and Vite loads vite.config.js in preference to
+# vite.config.ts - so a stale copy silently overrides your edits.
+# Keep tracked: vite.config.ts, vitest.config.ts, vite.node.d.ts
+# ---------------------------------------------------------------
+vite.config.js
+vite.config.d.ts
+vitest.config.js
+vitest.config.d.ts
+
+# ---------------------------------------------------------------
+# Dev server logs written into this folder
+# ---------------------------------------------------------------
+*.log
+vite.out.log
+vite.err.log
+npm-debug.log*
+yarn-error.log*
+
+# ---------------------------------------------------------------
+# OS / editor noise
+# ---------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/

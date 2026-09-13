@@ -1,0 +1,45 @@
+import type { Precision, ResolvedPlace } from "./types";
+
+export function isValidTime12h(value: string): boolean {
+  return /^([1-9]|0[1-9]|1[0-2]):([0-5][0-9])$/.test(value.trim());
+}
+
+export function formatDateTime(value: string, timeZone?: string): string {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  const baseOptions: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true
+  };
+
+  if (timeZone) {
+    baseOptions.timeZone = timeZone;
+  }
+
+  try {
+    return new Intl.DateTimeFormat("en-IN", {
+      ...baseOptions,
+      timeZoneName: "short"
+    }).format(date);
+  } catch {
+    return new Intl.DateTimeFormat("en-IN", baseOptions).format(date);
+  }
+}
+
+export function canGenerateFromPlace(place: ResolvedPlace | null): boolean {
+  if (!place) {
+    return false;
+  }
+  return Boolean(place.timezone && Number.isFinite(place.lat) && Number.isFinite(place.lng));
+}
+
+export function effectivePrecision(basePrecision: Precision, manuallyEdited: boolean): Precision {
+  return manuallyEdited ? "manual" : basePrecision;
+}
