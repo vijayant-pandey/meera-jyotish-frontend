@@ -16,6 +16,7 @@ import ComingSoonPage from "./components/ComingSoonPage";
 import HomePage from "./components/HomePage";
 import ResultsPanel from "./components/ResultsPanel";
 import SiteChrome from "./components/SiteChrome";
+import ZodiacPage from "./components/ZodiacPage";
 import {
   buildPath,
   humanizeSlug,
@@ -28,6 +29,7 @@ import {
   type AppRoute
 } from "./routes";
 import type { SitePage } from "./siteContent";
+import { findZodiacSign, ZODIAC_SIGNS } from "./zodiac";
 import type {
   Ayanamsha,
   KundaliReport,
@@ -816,6 +818,18 @@ function App() {
       route.name === "report-dasha"
     ) {
       return currentUser ? renderReportPage() : renderAuthPage("login");
+    }
+    // The homepage links each rashi to /sections/<sign>-horoscope, so a zodiac
+    // slug resolves to the reference page and anything else stays a placeholder.
+    const zodiacSign = findZodiacSign(route.slug);
+    if (zodiacSign) {
+      return (
+        <ZodiacPage
+          sign={zodiacSign}
+          allSigns={ZODIAC_SIGNS}
+          onSelectSign={(slug) => navigate({ name: "coming-soon", slug: `${slug}-horoscope` })}
+        />
+      );
     }
     return <ComingSoonPage title={humanizeSlug(route.slug)} />;
   };
