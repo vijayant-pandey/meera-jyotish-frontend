@@ -3,7 +3,9 @@ import {
   canGenerateFromPlace,
   effectivePrecision,
   formatDateTime,
+  formatBhavas,
   formatDms,
+  formatPosition,
   isValidTime12h
 } from "./utils";
 
@@ -39,6 +41,19 @@ describe("utils", () => {
     expect(formatDms(15.803611)).toBe("15-48-13");
     expect(formatDms(9.911111)).toBe("09-54-40");
     expect(formatDms(0)).toBe("00-00-00");
+  });
+
+  it("formats a position the way classical tables do", () => {
+    // Aquarius is sign 11; 24.0172 deg -> 24 deg Kumb 01' 02"
+    expect(formatPosition(24.017222, 11)).toBe("24° Kumb 01′ 02″");
+    expect(formatPosition(6.972222, 10)).toBe("06° Maka 58′ 20″");
+  });
+
+  it("lists ruled bhavas, or a dash when a graha rules none", () => {
+    expect(formatBhavas([3, 10])).toBe("3, 10 Bhava");
+    expect(formatBhavas([7])).toBe("7 Bhava");
+    expect(formatBhavas([])).toBe("-");
+    expect(formatBhavas(undefined)).toBe("-");
   });
 
   it("carries seconds into minutes rather than printing 60", () => {

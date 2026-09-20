@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from "vitest";
 import HomePage from "./HomePage";
 import { ASTROLOGERS, SERVICE_CARDS } from "../siteContent";
 
+// No fetch in jsdom, so the component falls back to the bundled content.
+
 describe("HomePage services", () => {
   it("renders every service card in a scrollable track", () => {
     render(<HomePage onNavigate={vi.fn()} onShowComingSoon={vi.fn()} />);
@@ -35,6 +37,27 @@ describe("HomePage services", () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it("steps the track with its own previous and next buttons", () => {
+    const { container } = render(<HomePage onNavigate={vi.fn()} onShowComingSoon={vi.fn()} />);
+    const track = container.querySelector(".service-track") as HTMLElement;
+    const scrollTo = vi.fn();
+    track.scrollTo = scrollTo as unknown as typeof track.scrollTo;
+    Object.defineProperty(track, "scrollWidth", { value: 4000, configurable: true });
+    Object.defineProperty(track, "clientWidth", { value: 1000, configurable: true });
+
+    fireEvent.click(screen.getByRole("button", { name: "Next services" }));
+    expect(scrollTo.mock.lastCall?.[0].left).toBeGreaterThan(0);
+
+    // From the start, Previous wraps to the far end rather than dead-ending.
+    fireEvent.click(screen.getByRole("button", { name: "Previous services" }));
+    expect(scrollTo.mock.lastCall?.[0].left).toBe(4000);
+  });
+
+  it("counts the cards beside the buttons", () => {
+    render(<HomePage onNavigate={vi.fn()} onShowComingSoon={vi.fn()} />);
+    expect(screen.getByText(`1 / ${SERVICE_CARDS.length}`)).toBeInTheDocument();
   });
 });
 

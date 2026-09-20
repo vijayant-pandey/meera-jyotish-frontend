@@ -1,5 +1,5 @@
 import type { DivisionalChartEntry, KundaliReport, PlanetPosition } from "../types";
-import { formatDateTime, formatDms } from "../utils";
+import { formatBhavas, formatDateTime, formatPosition } from "../utils";
 import DashaExplorer from "./DashaExplorer";
 import NorthIndianChart from "./NorthIndianChart";
 
@@ -89,42 +89,67 @@ function SummaryPanels({ report }: { report: KundaliReport }) {
           <table className="planet-table">
             <thead>
               <tr>
-                <th>Planets</th>
+                <th>Graha</th>
                 <th className="flag-col">C</th>
                 <th className="flag-col">R</th>
-                <th>Rashi</th>
-                <th>House</th>
                 <th>Longitude</th>
                 <th>Nakshatra</th>
                 <th>Pada</th>
-                <th>Relation</th>
+                <th>Nakshatra Lord / Sub Lord</th>
+                <th>Ruler of</th>
+                <th>Is In</th>
+                <th>B. Owner</th>
+                <th>Relationship</th>
+                <th>Dignities</th>
               </tr>
             </thead>
             <tbody>
               {result.ascendant && (
                 <tr>
-                  <td>Asc</td>
+                  <td>Lagna</td>
                   <td className="flag-col" />
                   <td className="flag-col" />
-                  <td>{result.ascendant.signName}</td>
-                  <td>1</td>
-                  <td>{formatDms(result.ascendant.degreeInSign)}</td>
+                  <td className="nowrap">
+                    {formatPosition(
+                      result.ascendant.degreeInSign,
+                      result.ascendant.signNumber
+                    )}
+                  </td>
                   <td>{result.ascendant.nakshatra.name}</td>
                   <td>{result.ascendant.nakshatra.pada}</td>
-                  <td />
+                  <td>
+                    {result.ascendant.nakshatra.lord}
+                    {result.ascendant.subLord ? `, ${result.ascendant.subLord}` : ""}
+                  </td>
+                  <td>{formatBhavas(result.ascendant.housesRuled)}</td>
+                  <td>1 Bhava</td>
+                  <td>{result.ascendant.signLord ?? "-"}</td>
+                  <td>-</td>
+                  <td>-</td>
                 </tr>
               )}
               {result.planets.map((planet) => (
                 <tr key={planet.name}>
-                  <td>{planet.name}</td>
+                  <td>
+                    {planet.sanskritName || planet.name}
+                    <small className="graha-alt">{planet.name}</small>
+                  </td>
                   <td className="flag-col">{planet.combust ? "C" : ""}</td>
                   <td className="flag-col">{motionFlag(planet)}</td>
-                  <td>{planet.signName}</td>
-                  <td>{planet.houseNumber}</td>
-                  <td>{formatDms(planet.degreeInSign)}</td>
+                  <td className="nowrap">
+                    {formatPosition(planet.degreeInSign, planet.signNumber)}
+                  </td>
                   <td>{planet.nakshatra.name}</td>
                   <td>{planet.nakshatra.pada}</td>
-                  <td>{planet.relation ?? ""}</td>
+                  <td>
+                    {planet.nakshatra.lord}
+                    {planet.subLord ? `, ${planet.subLord}` : ""}
+                  </td>
+                  <td>{formatBhavas(planet.housesRuled)}</td>
+                  <td>{planet.houseNumber} Bhava</td>
+                  <td>{planet.signLord ?? "-"}</td>
+                  <td>{planet.relation ?? "-"}</td>
+                  <td>{planet.dignity || "-"}</td>
                 </tr>
               ))}
             </tbody>
@@ -132,7 +157,9 @@ function SummaryPanels({ report }: { report: KundaliReport }) {
         </div>
         <p className="table-note">
           <strong>Note:</strong> [C] Combust &middot; [D] Direct &middot; [R] Retrograde.
-          Longitude is degrees-minutes-seconds within the sign.
+          Longitude is degrees-minutes-seconds within the rashi. Sub Lord is the KP
+          Vimshottari sub-division of the nakshatra. Relationship is how the graha regards
+          the lord of the rashi it sits in; Dignities is reported separately.
         </p>
       </article>
     </>

@@ -1,4 +1,4 @@
-import type { SitePage } from "./siteContent";
+import { FOOTER_SECTION_SLUGS, type SitePage } from "./siteContent";
 
 export type AppRoute =
   | { name: "home" }
@@ -8,7 +8,9 @@ export type AppRoute =
   | { name: "report-overview"; reportId: string }
   | { name: "report-chart"; reportId: string; chartKey: string }
   | { name: "report-dasha"; reportId: string }
-  | { name: "coming-soon"; slug: string };
+  | { name: "admin" }
+  | { name: "coming-soon"; slug: string }
+  | { name: "not-found"; path: string };
 
 export function normalizeChartKey(value: string): string {
   return value.trim().toUpperCase();
@@ -30,6 +32,53 @@ export function humanizeSlug(slug: string): string {
     .join(" ");
 }
 
+/**
+ * Slugs that resolve to a real placeholder page. Anything else under /sections/
+ * is a typo or a stale link and should 404 rather than silently render a page.
+ */
+const KNOWN_SECTION_SLUGS = new Set([
+  "match-making",
+  "horoscope",
+  "astrology",
+  "occult",
+  "lal-kitab",
+  "western-astrology",
+  "more-1",
+  "more-2",
+  "more-3",
+  "more-4",
+  "more-5",
+  "generate-kundali",
+  "panchang",
+  "astronomy",
+  "muhurt",
+  "others",
+  "contact-us",
+  "aries-horoscope",
+  "taurus-horoscope",
+  "gemini-horoscope",
+  "cancer-horoscope",
+  "leo-horoscope",
+  "virgo-horoscope",
+  "libra-horoscope",
+  "scorpio-horoscope",
+  "sagittarius-horoscope",
+  "capricorn-horoscope",
+  "aquarius-horoscope",
+  "pisces-horoscope"
+]);
+
+export function isKnownSectionSlug(slug: string): boolean {
+  return (
+    KNOWN_SECTION_SLUGS.has(slug) ||
+    // Footer links generate their own slugs; derive them rather than repeating
+    // the list here, or adding a footer link would silently 404.
+    FOOTER_SECTION_SLUGS.includes(slug) ||
+    slug.startsWith("chat-with-") ||
+    slug.startsWith("call-")
+  );
+}
+
 export function buildPath(route: AppRoute): string {
   switch (route.name) {
     case "home":
@@ -40,6 +89,8 @@ export function buildPath(route: AppRoute): string {
       return "/signup";
     case "generate":
       return "/generate";
+    case "admin":
+      return "/admin";
     case "report-overview":
       return `/reports/${route.reportId}`;
     case "report-chart":
@@ -48,6 +99,8 @@ export function buildPath(route: AppRoute): string {
       return `/reports/${route.reportId}/dasha`;
     case "coming-soon":
       return `/sections/${route.slug}`;
+    case "not-found":
+      return route.path;
   }
 }
 
@@ -66,8 +119,13 @@ export function parseRoute(pathname: string): AppRoute {
   if (segments[0] === "generate") {
     return { name: "generate" };
   }
-  if (segments[0] === "sections" && segments[1]) {
-    return { name: "coming-soon", slug: segments[1] };
+  if (segments[0] === "admin" && segments.length === 1) {
+    return { name: "admin" };
+  }
+  if (segments[0] === "sections" && segments[1] && segments.length === 2) {
+    return isKnownSectionSlug(segments[1])
+      ? { name: "coming-soon", slug: segments[1] }
+      : { name: "not-found", path: pathname };
   }
   if (segments[0] === "reports" && segments[1]) {
     if (segments.length === 2) {
@@ -85,7 +143,8 @@ export function parseRoute(pathname: string): AppRoute {
     }
   }
 
-  return { name: "home" };
+  // Unrecognised paths are a genuine 404, not a silent redirect to the homepage.
+  return { name: "not-found", path: pathname };
 }
 
 export function routeToSitePage(route: AppRoute): SitePage {
@@ -100,6 +159,7 @@ export function routeToSitePage(route: AppRoute): SitePage {
     case "report-dasha":
       return "generate";
     case "coming-soon":
+    case "not-found":
       return "coming-soon";
     default:
       return "home";
