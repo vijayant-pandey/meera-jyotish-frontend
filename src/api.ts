@@ -6,6 +6,7 @@ import type {
   KundaliReport,
   KundaliRequest,
   KundaliResponse,
+  DailyPanchang,
   PlaceSuggestion,
   ResolvedPlace,
   Source
@@ -120,4 +121,33 @@ export function logout(): Promise<{ status: string }> {
 
 export function getCurrentUser(): Promise<AuthUser> {
   return request("/api/auth/me");
+}
+
+export function subscribeEmail(email: string): Promise<{ status: string }> {
+  return request("/api/content/subscribe", {
+    method: "POST",
+    body: JSON.stringify({ email })
+  });
+}
+
+export function submitFeedback(message: string, email = ""): Promise<{ status: string }> {
+  return request("/api/content/feedback", {
+    method: "POST",
+    body: JSON.stringify({ message, email })
+  });
+}
+
+export function fetchPanchang(
+  lat: number,
+  lng: number,
+  timezone: string,
+  label: string
+): Promise<DailyPanchang> {
+  const params = new URLSearchParams({
+    lat: String(lat),
+    lng: String(lng),
+    tz: timezone,
+    label
+  });
+  return request(`/api/panchang?${params.toString()}`);
 }

@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { DAY_BY_LORD, findZodiacSign, GEMSTONE_BY_LORD, ZODIAC_SIGNS } from "./zodiac";
+import {
+  DAY_BY_LORD,
+  findZodiacSign,
+  GEMSTONE_BY_LORD,
+  withZodiacOverride,
+  ZODIAC_SIGNS
+} from "./zodiac";
 
 // Mirrors SIGN_LORDS / EXALTATION_SIGNS in backend/app/services/astrology.py.
 // If the backend tables ever change, this test should fail rather than let the
@@ -71,5 +77,35 @@ describe("zodiac reference data", () => {
     expect(findZodiacSign("aries-horoscope")?.name).toBe("Aries");
     expect(findZodiacSign("PISCES-HOROSCOPE")?.sanskrit).toBe("Meena");
     expect(findZodiacSign("match-making")).toBeUndefined();
+  });
+});
+
+describe("withZodiacOverride", () => {
+  const aries = ZODIAC_SIGNS[0];
+
+  it("returns the sign untouched when there is no override", () => {
+    expect(withZodiacOverride(aries, undefined)).toBe(aries);
+  });
+
+  it("replaces only the fields the admin filled in", () => {
+    const merged = withZodiacOverride(aries, { personality: "Edited personality." });
+    expect(merged.personality).toBe("Edited personality.");
+    expect(merged.career).toBe(aries.career);
+  });
+
+  it("treats a blank field as 'use the built-in text'", () => {
+    const merged = withZodiacOverride(aries, { tagline: "", career: "   " });
+    expect(merged.tagline).toBe(aries.tagline);
+    expect(merged.career).toBe(aries.career);
+  });
+
+  it("never lets an override touch the derived facts", () => {
+    const merged = withZodiacOverride(aries, {
+      personality: "x"
+    } as Parameters<typeof withZodiacOverride>[1]);
+    expect(merged.lord).toBe(aries.lord);
+    expect(merged.element).toBe(aries.element);
+    expect(merged.nakshatras).toEqual(aries.nakshatras);
+    expect(merged.exalted).toBe(aries.exalted);
   });
 });

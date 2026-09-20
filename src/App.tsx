@@ -14,8 +14,11 @@ import type { AuthUser } from "./auth";
 import AuthPage, { type LoginFormState, type SignupFormState } from "./components/AuthPage";
 import ComingSoonPage from "./components/ComingSoonPage";
 import HomePage from "./components/HomePage";
+import NotFoundPage from "./components/NotFoundPage";
+import AdminApp from "./admin/AdminApp";
 import ResultsPanel from "./components/ResultsPanel";
 import SiteChrome from "./components/SiteChrome";
+import SiteFooter from "./components/SiteFooter";
 import ZodiacPage from "./components/ZodiacPage";
 import {
   buildPath,
@@ -29,7 +32,8 @@ import {
   type AppRoute
 } from "./routes";
 import type { SitePage } from "./siteContent";
-import { findZodiacSign, ZODIAC_SIGNS } from "./zodiac";
+import { findZodiacSign, withZodiacOverride, ZODIAC_SIGNS } from "./zodiac";
+import { useSiteContent } from "./useSiteContent";
 import type {
   Ayanamsha,
   KundaliReport,
@@ -58,6 +62,7 @@ const INITIAL_FORM: FormState = {
 };
 
 function App() {
+  const siteContent = useSiteContent();
   const [route, setRoute] = useState<AppRoute>(() => parseRoute(window.location.pathname));
   const [pendingRoute, setPendingRoute] = useState<AppRoute | null>(null);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
@@ -788,7 +793,13 @@ function App() {
   if (!authResolved) {
     return (
       <div className="site-shell">
-        <SiteChrome currentUser={null} page={routeToSitePage(route)} onNavigate={goToPage} onLogout={() => {}} />
+        <SiteChrome
+          currentUser={null}
+          page={routeToSitePage(route)}
+          onNavigate={goToPage}
+          onLogout={() => {}}
+          navItems={siteContent.navItems}
+        />
         <main className="app-shell">
           <section className="panel">
             <p className="eyebrow">Loading Session</p>
@@ -819,13 +830,35 @@ function App() {
     ) {
       return currentUser ? renderReportPage() : renderAuthPage("login");
     }
+    if (route.name === "admin") {
+      // Handled by the early return above, which renders the panel without site
+      // chrome. This branch exists so the union narrows for the cases below.
+      return null;
+    }
+    if (route.name === "not-found") {
+      // A nav item added in the admin panel produces a /sections/ slug the static
+      // router cannot know about, so check the live nav list before calling it a
+      // 404. Without this, every nav item added through the CMS would 404.
+      const sectionSlug = route.path.startsWith("/sections/")
+        ? route.path.slice("/sections/".length)
+        : "";
+      const matchesNavItem =
+        sectionSlug !== "" &&
+        siteContent.navItems.some(
+          (item) => slugify(item.comingSoonTitle ?? item.label) === sectionSlug
+        );
+      if (matchesNavItem) {
+        return <ComingSoonPage title={humanizeSlug(sectionSlug)} />;
+      }
+      return <NotFoundPage path={route.path} onGoHome={() => navigate({ name: "home" })} />;
+    }
     // The homepage links each rashi to /sections/<sign>-horoscope, so a zodiac
     // slug resolves to the reference page and anything else stays a placeholder.
     const zodiacSign = findZodiacSign(route.slug);
     if (zodiacSign) {
       return (
         <ZodiacPage
-          sign={zodiacSign}
+          sign={withZodiacOverride(zodiacSign, siteContent.zodiacOverride(zodiacSign.slug))}
           allSigns={ZODIAC_SIGNS}
           onSelectSign={(slug) => navigate({ name: "coming-soon", slug: `${slug}-horoscope` })}
         />
@@ -834,10 +867,16 @@ function App() {
     return <ComingSoonPage title={humanizeSlug(route.slug)} />;
   };
 
+  // The admin panel is its own surface - no site chrome, no public session.
+  if (route.name === "admin") {
+    return <AdminApp onExit={() => navigate({ name: "home" })} />;
+  }
+
   return (
     <div className="site-shell">
       <SiteChrome
         currentUser={currentUser}
+        navItems={siteContent.navItems}
         page={routeToSitePage(route)}
         onNavigate={goToPage}
         onLogout={() => {
@@ -845,6 +884,18 @@ function App() {
         }}
       />
       {renderCurrentPage()}
+      <SiteFooter
+        description={siteContent.text(
+          "footer.description",
+          "We illuminate the pathways of your life through the celestial wisdom of astrology. Our astrologers combine classical Vedic knowledge with modern insight to give you readings you can act on."
+        )}
+        copyright={siteContent.text(
+          "footer.copyright",
+          `Copyright © ${new Date().getFullYear()}, All Rights Reserved.`
+        )}
+        version={siteContent.text("footer.version", "1.0.0")}
+        onNavigate={(path) => navigate(parseRoute(path))}
+      />
     </div>
   );
 }

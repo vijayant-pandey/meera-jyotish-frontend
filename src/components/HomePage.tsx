@@ -1,11 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  ASTROLOGERS,
-  HERO_SLIDES,
-  HOROSCOPE_SIGNS,
-  SERVICE_CARDS,
-  type SitePage
-} from "../siteContent";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { HOROSCOPE_SIGNS, type SitePage } from "../siteContent";
+import { useSiteContent } from "../useSiteContent";
+import PanchangSection from "./PanchangSection";
 
 type HomePageProps = {
   onNavigate: (page: SitePage, title?: string) => void;
@@ -13,10 +9,15 @@ type HomePageProps = {
 };
 
 function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
+  const content = useSiteContent();
+  const HERO_SLIDES = content.heroSlides;
+  const SERVICE_CARDS = content.services;
+  const ASTROLOGERS = content.astrologers;
   const [activeSlide, setActiveSlide] = useState(0);
   const [astrologerPage, setAstrologerPage] = useState(0);
   const serviceTrackRef = useRef<HTMLDivElement>(null);
   const [servicesPaused, setServicesPaused] = useState(false);
+  const [serviceAt, setServiceAt] = useState(0);
   const ASTROLOGERS_PER_PAGE = 3;
   const astrologerPageCount = Math.ceil(ASTROLOGERS.length / ASTROLOGERS_PER_PAGE);
   const visibleAstrologers = ASTROLOGERS.slice(
@@ -30,11 +31,54 @@ function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
     }, 4500);
 
     return () => window.clearInterval(slideTimer);
+  }, [HERO_SLIDES.length]);
+
+  useEffect(() => {
+    // An admin can delete slides or astrologers while the page is open; clamp the
+    // indexes so we never read past the end of a shorter list.
+    setActiveSlide((current) => (current >= HERO_SLIDES.length ? 0 : current));
+    setAstrologerPage((current) =>
+      current * 3 >= ASTROLOGERS.length ? 0 : current
+    );
+    setServiceAt((current) => (current >= SERVICE_CARDS.length ? 0 : current));
+  }, [HERO_SLIDES.length, ASTROLOGERS.length, SERVICE_CARDS.length]);
+
+  /** Width of one card plus the gap, measured now rather than assumed, so the
+   *  track stays aligned however many cards the current width shows. */
+  const serviceStep = (track: HTMLDivElement): number => {
+    const card = track.firstElementChild as HTMLElement | null;
+    if (!card) {
+      return 0;
+    }
+    const gap = Number.parseFloat(window.getComputedStyle(track).columnGap) || 16;
+    return card.offsetWidth + gap;
+  };
+
+  // Previous, Next and the timer all move the track the same way.
+  const stepServices = useCallback((direction: 1 | -1) => {
+    const track = serviceTrackRef.current;
+    if (!track) {
+      return;
+    }
+    const step = serviceStep(track);
+    if (step === 0) {
+      return;
+    }
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    const atStart = track.scrollLeft <= 4;
+    // Both directions wrap rather than dead-ending. Asking to scroll past the
+    // end is clamped by the browser, which lands it on the last card.
+    let left: number;
+    if (direction === 1) {
+      left = atEnd ? 0 : track.scrollLeft + step;
+    } else {
+      left = atStart ? track.scrollWidth : track.scrollLeft - step;
+    }
+    track.scrollTo({ left, behavior: "smooth" });
   }, []);
 
   useEffect(() => {
-    const track = serviceTrackRef.current;
-    if (!track || servicesPaused) {
+    if (servicesPaused) {
       return;
     }
     // Auto-advancing motion is disorienting for some readers, so honour the OS setting.
@@ -42,32 +86,22 @@ function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
       return;
     }
 
-    const serviceTimer = window.setInterval(() => {
-      const card = track.firstElementChild as HTMLElement | null;
-      if (!card) {
-        return;
-      }
-      // Step by one card rather than a fixed pixel count, so the scroll stays
-      // aligned however many cards the current width happens to show.
-      const gap = Number.parseFloat(window.getComputedStyle(track).columnGap) || 16;
-      const step = card.offsetWidth + gap;
-      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-      track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + step, behavior: "smooth" });
-    }, 4000);
-
+    const serviceTimer = window.setInterval(() => stepServices(1), 4000);
     return () => window.clearInterval(serviceTimer);
-  }, [servicesPaused]);
+  }, [servicesPaused, stepServices]);
 
   return (
     <main className="app-shell home-page">
       <section className="hero home-intro">
         <div>
-          <p className="eyebrow">Kundali Generator</p>
-          <h1>Generate a precise North India birth chart.</h1>
+          <p className="eyebrow">{content.text("home.hero.eyebrow", "Kundali Generator")}</p>
+          <h1>{content.text("home.hero.heading", "Generate a precise North India birth chart.")}</h1>
         </div>
         <p className="hero-copy">
-          Global place detection, editable coordinates, 12-hour birth time input, and Swiss
-          Ephemeris-backed kundali calculations.
+          {content.text(
+            "home.hero.copy",
+            "Global place detection, editable coordinates, 12-hour birth time input, and Swiss Ephemeris-backed kundali calculations."
+          )}
         </p>
       </section>
 
@@ -112,9 +146,28 @@ function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
       </section>
 
       <section className="site-section services-section">
-        <div className="section-heading">
-          <p className="eyebrow">Our Services</p>
-          <h2>Explore astrology services</h2>
+        <div className="section-heading row-heading">
+          <div>
+            <p className="eyebrow">{content.text("home.services.eyebrow", "Our Services")}</p>
+            <h2>{content.text("home.services.heading", "Explore astrology services")}</h2>
+          </div>
+          {/* The buttons sit outside the track, so they need their own hover
+              pause - otherwise the timer fights whoever is clicking them. */}
+          <div
+            className="slider-buttons"
+            onMouseEnter={() => setServicesPaused(true)}
+            onMouseLeave={() => setServicesPaused(false)}
+          >
+            <button type="button" aria-label="Previous services" onClick={() => stepServices(-1)}>
+              Previous
+            </button>
+            <span className="slider-count">
+              {Math.min(serviceAt + 1, SERVICE_CARDS.length)} / {SERVICE_CARDS.length}
+            </span>
+            <button type="button" aria-label="Next services" onClick={() => stepServices(1)}>
+              Next
+            </button>
+          </div>
         </div>
         <div
           className="service-track"
@@ -123,6 +176,11 @@ function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
           onMouseLeave={() => setServicesPaused(false)}
           onFocusCapture={() => setServicesPaused(true)}
           onBlurCapture={() => setServicesPaused(false)}
+          onScroll={(event) => {
+            const track = event.currentTarget;
+            const step = serviceStep(track);
+            setServiceAt(step > 0 ? Math.round(track.scrollLeft / step) : 0);
+          }}
         >
           {SERVICE_CARDS.map((card) => (
             <article className="site-card" key={card.title}>
@@ -147,11 +205,13 @@ function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
         </div>
       </section>
 
+      <PanchangSection />
+
       <section className="site-section astrologers-section">
         <div className="section-heading row-heading">
           <div>
-            <p className="eyebrow">Our Astrologers</p>
-            <h2>Meet our astrologers</h2>
+            <p className="eyebrow">{content.text("home.astrologers.eyebrow", "Our Astrologers")}</p>
+            <h2>{content.text("home.astrologers.heading", "Meet our astrologers")}</h2>
           </div>
           <div className="slider-buttons">
             {/* Previous and Next used to run identical logic, so both simply toggled
@@ -224,25 +284,35 @@ function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
               <div className="astrologer-actions">
                 <div className="astrologer-rates">
                   <p>
-                    <s>&#8377;{astrologer.pricePerMinute}/Min</s>
-                    <em>Free</em>
+                    {astrologer.isFree === false ? (
+                      <strong>&#8377;{astrologer.pricePerMinute}/Min</strong>
+                    ) : (
+                      <>
+                        <s>&#8377;{astrologer.pricePerMinute}/Min</s>
+                        <em>Free</em>
+                      </>
+                    )}
                   </p>
                 </div>
                 <div className="astrologer-buttons">
-                  <button
-                    type="button"
-                    className="chat-button"
-                    onClick={() => onShowComingSoon(`Chat with ${astrologer.name}`)}
-                  >
-                    Free Chat
-                  </button>
-                  <button
-                    type="button"
-                    className="call-button"
-                    onClick={() => onShowComingSoon(`Call ${astrologer.name}`)}
-                  >
-                    Free Call
-                  </button>
+                  {astrologer.chatEnabled !== false && (
+                    <button
+                      type="button"
+                      className="chat-button"
+                      onClick={() => onShowComingSoon(`Chat with ${astrologer.name}`)}
+                    >
+                      {astrologer.isFree === false ? "Chat" : "Free Chat"}
+                    </button>
+                  )}
+                  {astrologer.callEnabled !== false && (
+                    <button
+                      type="button"
+                      className="call-button"
+                      onClick={() => onShowComingSoon(`Call ${astrologer.name}`)}
+                    >
+                      {astrologer.isFree === false ? "Call" : "Free Call"}
+                    </button>
+                  )}
                 </div>
               </div>
             </article>
@@ -252,8 +322,8 @@ function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
 
       <section className="site-section horoscope-section">
         <div className="section-heading">
-          <p className="eyebrow">Know Your Horoscope</p>
-          <h2>Choose your zodiac sign</h2>
+          <p className="eyebrow">{content.text("home.horoscope.eyebrow", "Know Your Horoscope")}</p>
+          <h2>{content.text("home.horoscope.heading", "Choose your zodiac sign")}</h2>
         </div>
         <div className="horoscope-grid">
           {HOROSCOPE_SIGNS.map((sign) => (
