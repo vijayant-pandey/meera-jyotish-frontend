@@ -13,7 +13,7 @@ function SiteChrome({ currentUser, page, onNavigate, onLogout }: SiteChromeProps
     <>
       <header className="site-topbar">
         <button className="brand-button" type="button" onClick={() => onNavigate("home")}>
-          Astro Kundali
+          Meera Astrology
         </button>
         <div className="topbar-actions">
           {currentUser ? (

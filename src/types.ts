@@ -51,6 +51,17 @@ export interface PlanetPosition {
   houseNumber: number;
   retrograde: boolean;
   nakshatra: NakshatraInfo;
+  combust?: boolean;
+  /** null for Rahu and Ketu, which own no sign and so have no dignity. */
+  relation?: string | null;
+}
+
+export interface AscendantPosition {
+  longitude: number;
+  signNumber: number;
+  signName: string;
+  degreeInSign: number;
+  nakshatra: NakshatraInfo;
 }
 
 export interface Panchang {
@@ -147,6 +158,7 @@ export interface BirthContext {
 
 export interface KundaliResponse {
   birthContext: BirthContext;
+  ascendant?: AscendantPosition | null;
   chart: Chart;
   divisionalCharts: DivisionalChartEntry[];
   planets: PlanetPosition[];

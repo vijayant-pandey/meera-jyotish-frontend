@@ -1,15 +1,15 @@
 :root {
   color-scheme: light;
-  --bg: #edf2f3;
-  --bg-strong: #d9e4e7;
-  --panel: rgba(255, 253, 247, 0.94);
-  --panel-strong: #fffaf0;
-  --text: #132535;
-  --muted: #587080;
-  --line: rgba(21, 55, 75, 0.16);
-  --accent: #ad6819;
-  --accent-strong: #71400a;
-  --shadow: 0 20px 46px rgba(22, 53, 72, 0.12);
+  --bg: #fff6e0;
+  --bg-strong: #ffe7b0;
+  --panel: rgba(255, 253, 244, 0.96);
+  --panel-strong: #fffdf5;
+  --text: #3d1010;
+  --muted: #8d5747;
+  --line: rgba(166, 30, 30, 0.18);
+  --accent: #c62828;
+  --accent-strong: #8e1616;
+  --shadow: 0 20px 46px rgba(150, 40, 20, 0.14);
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
 }
 
@@ -22,9 +22,9 @@ body {
   min-height: 100vh;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(255, 249, 231, 0.95), transparent 38%),
-    radial-gradient(circle at bottom right, rgba(194, 137, 54, 0.16), transparent 36%),
-    linear-gradient(180deg, #e9f0f2 0%, var(--bg) 100%);
+    radial-gradient(circle at top left, rgba(255, 247, 219, 0.96), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(246, 168, 33, 0.22), transparent 36%),
+    linear-gradient(180deg, #fff1c9 0%, var(--bg) 100%);
 }
 
 button,
@@ -46,9 +46,9 @@ select {
   gap: 18px;
   align-items: center;
   padding: 14px 24px;
-  background: rgba(15, 42, 59, 0.97);
-  color: #fffaf0;
-  box-shadow: 0 12px 28px rgba(12, 38, 54, 0.2);
+  background: rgba(158, 26, 26, 0.97);
+  color: #fffdf5;
+  box-shadow: 0 12px 28px rgba(120, 18, 18, 0.26);
 }
 
 .brand-button,
@@ -64,7 +64,7 @@ select {
 }
 
 .brand-button {
-  color: #fffaf0;
+  color: #fffdf5;
   background: transparent;
   font-size: 1.35rem;
   font-weight: 700;
@@ -82,19 +82,19 @@ select {
 .ghost-button,
 .topbar-primary {
   padding: 10px 16px;
-  border-radius: 999px;
+  border-radius: 0;
   font-weight: 700;
 }
 
 .ghost-button {
-  color: #fffaf0;
-  background: rgba(255, 250, 240, 0.12);
-  border: 1px solid rgba(255, 250, 240, 0.26);
+  color: #fffdf5;
+  background: rgba(255, 246, 214, 0.16);
+  border: 1px solid rgba(255, 246, 214, 0.3);
 }
 
 .topbar-primary {
   color: var(--accent-strong);
-  background: #f9d792;
+  background: #ffc93c;
 }
 
 .site-navbar {
@@ -102,26 +102,33 @@ select {
   top: 61px;
   z-index: 35;
   display: flex;
-  gap: 10px;
+  gap: 0;
   overflow-x: auto;
-  padding: 12px 20px;
-  background: rgba(249, 241, 229, 0.95);
+  padding: 0 20px;
+  background: rgba(255, 247, 224, 0.95);
   border-bottom: 1px solid var(--line);
 }
 
 .site-navbar button {
   flex: 0 0 auto;
-  padding: 10px 15px;
-  border-radius: 999px;
+  padding: 14px 18px;
+  border-radius: 0;
   color: var(--text);
-  background: rgba(255, 251, 244, 0.78);
-  border: 1px solid rgba(105, 74, 43, 0.14);
+  background: transparent;
+  /* Menu items sit flush against each other and are separated by a single rule,
+     rather than each being its own outlined pill. */
+  border: 0;
+  border-right: 1px solid var(--line);
   font-weight: 700;
+}
+
+.site-navbar button:first-child {
+  border-left: 1px solid var(--line);
 }
 
 .site-navbar button.active,
 .site-navbar button:hover {
-  color: #fff8ed;
+  color: #fff8e3;
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
 }
 
@@ -136,7 +143,7 @@ select {
   max-width: 1280px;
   padding: 30px;
   background:
-    linear-gradient(140deg, rgba(255, 247, 233, 0.96), rgba(234, 214, 182, 0.88)),
+    linear-gradient(140deg, rgba(255, 249, 226, 0.96), rgba(252, 226, 165, 0.9)),
     var(--panel);
   border: 1px solid var(--line);
   border-radius: 28px;
@@ -175,6 +182,12 @@ select {
 .home-intro {
   justify-items: center;
   text-align: center;
+  /* Only this hero spans the full width. .hero is shared, so the cap is lifted
+     here rather than on the base rule. The margin must be reset too: .home-page is
+     a grid container, and auto margins on a grid item switch off stretch, so the
+     box would shrink to its content width and sit centred however wide it may be. */
+  max-width: none;
+  margin: 0 0 28px;
 }
 
 .home-intro h1 {
@@ -225,9 +238,9 @@ select {
   bottom: 28px;
   max-width: 520px;
   padding: 22px;
-  color: #fff8ed;
-  background: rgba(38, 20, 10, 0.55);
-  border: 1px solid rgba(255, 248, 237, 0.22);
+  color: #fff8e3;
+  background: rgba(72, 14, 10, 0.58);
+  border: 1px solid rgba(255, 250, 230, 0.26);
   border-radius: 24px;
   backdrop-filter: blur(8px);
 }
@@ -251,7 +264,7 @@ select {
 }
 
 .carousel-caption p:last-child {
-  color: rgba(255, 248, 237, 0.88);
+  color: rgba(255, 250, 230, 0.9);
   margin-bottom: 0;
 }
 
@@ -269,10 +282,10 @@ select {
 .card-button,
 .auth-switch button {
   padding: 10px 14px;
-  border-radius: 999px;
+  border-radius: 0;
   color: var(--accent-strong);
-  background: rgba(255, 249, 241, 0.92);
-  border: 1px solid rgba(105, 74, 43, 0.16);
+  background: rgba(255, 251, 236, 0.94);
+  border: 1px solid rgba(166, 45, 35, 0.16);
   font-weight: 700;
 }
 
@@ -286,8 +299,8 @@ select {
   width: 11px;
   height: 11px;
   padding: 0;
-  border-radius: 999px;
-  background: rgba(93, 58, 29, 0.28);
+  border-radius: 0;
+  background: rgba(155, 45, 30, 0.3);
 }
 
 .carousel-dots button.active {
@@ -301,7 +314,7 @@ select {
   gap: 18px;
   padding: 26px;
   border-radius: 30px;
-  background: rgba(253, 248, 239, 0.62);
+  background: rgba(255, 250, 232, 0.7);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
 }
@@ -320,20 +333,227 @@ select {
   align-items: end;
 }
 
-.service-grid,
 .astrologer-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* Three per page; Previous/Next steps through the rest. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+
+/* Full breadth. Auto margin cleared too - .home-page is a grid container and an
+   auto margin on a grid item switches off stretch. */
+.home-page .astrologers-section {
+  max-width: none;
+  margin: 0;
+}
+
+.slider-count {
+  color: var(--muted);
+  font-weight: 700;
+  align-self: center;
+}
+
+.astrologer-card {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 18px;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.astrologer-ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #fff8e3;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.astrologer-top {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.astrologer-top img {
+  width: 92px;
+  height: 108px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.astrologer-id {
+  min-width: 0;
+}
+
+.astrologer-id h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+}
+
+/* An indicator dot, not a control - it stays round. */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #b9a89a;
+  flex: 0 0 auto;
+}
+
+.status-dot.online {
+  background: #2f9e44;
+}
+
+.astrologer-langs {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.astrologer-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.astrologer-skills li {
+  padding: 4px 8px;
+  background: rgba(255, 243, 205, 0.9);
+  border: 1px solid var(--line);
+  font-size: 0.76rem;
+}
+
+.astrologer-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.astrologer-stats strong {
+  display: block;
+  font-size: 0.98rem;
+}
+
+.astrologer-stats span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.astrologer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.astrologer-rates p {
+  display: grid;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.astrologer-rates s {
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.astrologer-rates em {
+  font-style: normal;
+  font-weight: 700;
+  color: #2f7a2a;
+}
+
+.astrologer-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-button,
+.call-button {
+  padding: 10px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chat-button {
+  background: var(--accent);
+  color: #fff8e3;
+  border: 1px solid var(--accent);
+}
+
+.call-button {
+  background: rgba(255, 243, 205, 0.9);
+  color: var(--accent-strong);
+  border: 1px solid var(--line);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Full breadth. The auto margin has to be cleared too - .home-page is a grid
+   container and auto margins on a grid item switch off stretch. */
+.home-page .services-section {
+  max-width: none;
+  margin: 0;
+}
+
+/* Horizontal strip rather than a fixed grid, so eight cards fit any width and
+   the timer can step through them. Native scrolling keeps it swipeable. */
+.service-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* The track advances itself, so the scrollbar is noise. Scrolling still works
+     by swipe, trackpad and drag - only the bar is hidden. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.service-track::-webkit-scrollbar {
+  display: none;
+}
+
+.service-track .site-card {
+  flex: 0 0 clamp(240px, 23%, 340px);
+  scroll-snap-align: start;
 }
 
 .site-card {
   display: grid;
   overflow: hidden;
   border-radius: 22px;
-  background: rgba(255, 251, 244, 0.95);
-  border: 1px solid rgba(105, 74, 43, 0.14);
-  box-shadow: 0 16px 32px rgba(89, 49, 19, 0.1);
+  background: rgba(255, 252, 238, 0.96);
+  border: 1px solid rgba(166, 45, 35, 0.14);
+  box-shadow: 0 16px 32px rgba(155, 45, 30, 0.12);
 }
 
 .card-img-top {
@@ -366,8 +586,16 @@ select {
 
 .horoscope-grid {
   display: grid;
+  /* Twelve rashis over six columns gives exactly two rows. */
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 14px;
+}
+
+/* Full breadth. Auto margin cleared too - .home-page is a grid container and an
+   auto margin on a grid item switches off stretch. */
+.home-page .horoscope-section {
+  max-width: none;
+  margin: 0;
 }
 
 .horoscope-card {
@@ -375,13 +603,13 @@ select {
   gap: 10px;
   padding: 0 0 14px;
   overflow: hidden;
-  border-radius: 20px;
-  border: 1px solid rgba(105, 74, 43, 0.14);
-  background: rgba(255, 251, 244, 0.95);
+  border-radius: 0;
+  border: 1px solid rgba(166, 45, 35, 0.14);
+  background: rgba(255, 252, 238, 0.96);
   color: var(--text);
   cursor: pointer;
   font-weight: 700;
-  box-shadow: 0 14px 28px rgba(89, 49, 19, 0.09);
+  box-shadow: 0 14px 28px rgba(155, 45, 30, 0.1);
 }
 
 .horoscope-card img {
@@ -449,9 +677,9 @@ select {
 .auth-form input {
   width: 100%;
   padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(105, 74, 43, 0.2);
-  background: rgba(255, 251, 244, 0.95);
+  border-radius: 0;
+  border: 1px solid rgba(166, 45, 35, 0.2);
+  background: rgba(255, 252, 238, 0.96);
   color: var(--text);
 }
 
@@ -466,6 +694,7 @@ select {
   color: var(--accent);
   background: transparent;
   border: 0;
+  text-decoration: underline;
 }
 
 .success-banner {
@@ -481,6 +710,12 @@ select {
   border: 1px solid var(--line);
   border-radius: 26px;
   box-shadow: var(--shadow);
+  /* Padding belongs on the base class. It used to be set only by
+     `.results-stack .panel`, so every panel outside that container - the saved
+     report header, the auth card, the coming-soon card and the loading/error
+     sections - rendered with its content flush against the border. Every
+     variant that wants a different value overrides this later in the file. */
+  padding: 22px;
 }
 
 .form-panel {
@@ -509,16 +744,16 @@ select {
 .kundali-form select {
   width: 100%;
   padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(105, 74, 43, 0.2);
-  background: rgba(255, 251, 244, 0.95);
+  border-radius: 0;
+  border: 1px solid rgba(166, 45, 35, 0.2);
+  background: rgba(255, 252, 238, 0.96);
   color: var(--text);
 }
 
 .kundali-form input:focus,
 .kundali-form select:focus {
-  outline: 2px solid rgba(141, 65, 40, 0.2);
-  border-color: rgba(141, 65, 40, 0.45);
+  outline: 2px solid rgba(198, 40, 40, 0.2);
+  border-color: rgba(198, 40, 40, 0.45);
 }
 
 .two-col,
@@ -557,10 +792,10 @@ select {
   top: calc(100% + 8px);
   left: 0;
   right: 0;
-  background: rgba(255, 249, 241, 0.98);
-  border: 1px solid rgba(105, 74, 43, 0.18);
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(78, 44, 16, 0.18);
+  background: rgba(255, 251, 236, 0.98);
+  border: 1px solid rgba(166, 45, 35, 0.18);
+  border-radius: 0;
+  box-shadow: 0 20px 40px rgba(150, 42, 28, 0.2);
   overflow: hidden;
 }
 
@@ -577,16 +812,16 @@ select {
 }
 
 .suggestion-item + .suggestion-item {
-  border-top: 1px solid rgba(105, 74, 43, 0.08);
+  border-top: 1px solid rgba(166, 45, 35, 0.08);
 }
 
 .suggestion-item:hover {
-  background: rgba(222, 197, 162, 0.25);
+  background: rgba(250, 214, 140, 0.3);
 }
 
 .suggestion-item.active {
-  background: rgba(222, 197, 162, 0.35);
-  outline: 1px solid rgba(141, 65, 40, 0.18);
+  background: rgba(250, 214, 140, 0.4);
+  outline: 1px solid rgba(198, 40, 40, 0.18);
 }
 
 .suggestion-item span,
@@ -600,23 +835,23 @@ select {
   gap: 6px;
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(237, 223, 203, 0.55);
-  border: 1px solid rgba(112, 76, 41, 0.15);
+  background: rgba(252, 232, 185, 0.6);
+  border: 1px solid rgba(166, 60, 35, 0.16);
 }
 
 .error-banner {
   padding: 14px 16px;
   border-radius: 18px;
-  color: #6a1d0d;
-  background: rgba(198, 84, 56, 0.12);
-  border: 1px solid rgba(198, 84, 56, 0.24);
+  color: #7d1200;
+  background: rgba(214, 90, 70, 0.16);
+  border: 1px solid rgba(198, 60, 50, 0.3);
 }
 
 .primary-button {
   padding: 16px 20px;
   border: 0;
-  border-radius: 18px;
-  color: #fff8f2;
+  border-radius: 0;
+  color: #fffdf5;
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
   cursor: pointer;
   font-weight: 700;
@@ -655,6 +890,93 @@ select {
   gap: 20px;
 }
 
+/* These rules were nested inside the max-width: 720px block and written
+   unindented, so the saved-report header and its section tabs rendered with no
+   styling at all on anything wider than a phone. */
+.report-summary-panel {
+  margin-bottom: 24px;
+}
+
+/* Title left, section tabs right. .panel-header on its own only sets a margin,
+   and the other panels rely on it stacking, so scope the row layout to here. */
+.report-summary-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.report-section-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.report-section-tabs button {
+  border: 1px solid rgba(198, 60, 40, 0.24);
+  background: #fff6dd;
+  color: #8e1616;
+  border-radius: 0;
+  padding: 10px 16px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.report-section-tabs button.active {
+  background: linear-gradient(135deg, #c62828, #f6a821);
+  color: #fffdf5;
+  border-color: transparent;
+}
+
+/* Rashi, Bhava Chalit and Navamsa are compared side by side. */
+.chart-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  /* stretch, not start: every card takes the height of the tallest so the grids
+     below can be bottom-aligned against a shared baseline. */
+  align-items: stretch;
+}
+
+.chart-row .chart-card {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Stack each card's heading: three across leaves no room for the side-by-side
+   title/controls split the single full-width card uses. */
+.chart-row .chart-heading {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.chart-row .chart-controls {
+  min-width: 0;
+}
+
+.chart-row .chart-submeta {
+  max-width: none;
+}
+
+.chart-row .north-chart {
+  max-width: 100%;
+  /* Only the first card carries the Select Chart picker, so its heading is taller
+     and used to push its grid down. Every grid in the row is the same size, so
+     pinning them to the bottom of equal-height cards lines their tops up too -
+     no hard-coded offset that breaks when the heading text wraps differently. */
+  margin-top: auto;
+}
+
+@media (max-width: 1180px) {
+  .chart-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .chart-card,
 .results-stack .panel {
   padding: 22px;
@@ -683,8 +1005,8 @@ select {
   display: grid;
   gap: 6px;
   padding: 12px 14px;
-  border-radius: 16px;
-  background: rgba(245, 235, 218, 0.75);
+  border-radius: 0;
+  background: rgba(255, 243, 205, 0.82);
 }
 
 .chart-selector span,
@@ -696,9 +1018,9 @@ select {
 .chart-selector select {
   width: 100%;
   padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(105, 74, 43, 0.2);
-  background: rgba(255, 251, 244, 0.95);
+  border-radius: 0;
+  border: 1px solid rgba(166, 45, 35, 0.2);
+  background: rgba(255, 252, 238, 0.96);
   color: var(--text);
 }
 
@@ -718,12 +1040,12 @@ select {
 
 .chart-line {
   fill: none;
-  stroke: rgba(19, 67, 91, 0.62);
+  stroke: rgba(166, 30, 30, 0.62);
   stroke-width: 2;
 }
 
 .chart-outline {
-  fill: rgba(255, 253, 247, 0.74);
+  fill: rgba(255, 253, 244, 0.78);
 }
 
 .house-label,
@@ -751,21 +1073,35 @@ select {
 
 .detail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 14px;
 }
 
 .detail-grid div {
   display: grid;
   gap: 6px;
+  /* Grid items default to min-width: auto, so a long unbreakable run pushes past
+     the tile instead of wrapping inside it. */
+  min-width: 0;
   padding: 14px;
   border-radius: 16px;
-  background: rgba(245, 235, 218, 0.7);
+  background: rgba(255, 243, 205, 0.8);
 }
 
 .detail-grid span {
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.detail-grid div > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The deity line is a sentence, not a one-word fact, so it takes its own row
+   rather than being squeezed into a 160px tile. */
+.detail-grid .fact-wide {
+  grid-column: 1 / -1;
 }
 
 .table-wrap {
@@ -783,7 +1119,7 @@ select {
 .dasha-detail-card {
   padding: 14px;
   border-radius: 16px;
-  background: rgba(245, 235, 218, 0.7);
+  background: rgba(255, 243, 205, 0.8);
 }
 
 .dasha-summary-grid span,
@@ -800,10 +1136,10 @@ select {
 }
 
 .dasha-column {
-  border: 1px solid rgba(97, 67, 33, 0.12);
+  border: 1px solid rgba(160, 42, 32, 0.12);
   border-radius: 18px;
   padding: 14px;
-  background: rgba(255, 250, 243, 0.72);
+  background: rgba(255, 251, 235, 0.76);
 }
 
 .dasha-column-header {
@@ -830,16 +1166,16 @@ select {
   display: grid;
   gap: 4px;
   padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(97, 67, 33, 0.12);
+  border-radius: 0;
+  border: 1px solid rgba(160, 42, 32, 0.12);
   background: rgba(255, 255, 255, 0.62);
   color: var(--text);
   cursor: pointer;
 }
 
 .dasha-button.active {
-  border-color: rgba(141, 65, 40, 0.45);
-  background: rgba(228, 210, 185, 0.68);
+  border-color: rgba(198, 40, 40, 0.45);
+  background: rgba(250, 222, 160, 0.7);
 }
 
 .dasha-detail-card {
@@ -856,7 +1192,7 @@ table {
 th,
 td {
   padding: 12px 10px;
-  border-bottom: 1px solid rgba(97, 67, 33, 0.12);
+  border-bottom: 1px solid rgba(160, 42, 32, 0.12);
   text-align: left;
 }
 
@@ -882,13 +1218,12 @@ th {
     position: static;
   }
 
-  .service-grid,
   .astrologer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .horoscope-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -929,35 +1264,9 @@ th {
     position: static;
   }
 
-.topbar-actions {
-  justify-content: flex-start;
-}
-
-.report-summary-panel {
-  margin-bottom: 24px;
-}
-
-.report-section-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.report-section-tabs button {
-  border: 1px solid rgba(134, 84, 58, 0.2);
-  background: #fff7ec;
-  color: #5f3824;
-  border-radius: 999px;
-  padding: 10px 16px;
-  font: inherit;
-  cursor: pointer;
-}
-
-.report-section-tabs button.active {
-  background: linear-gradient(135deg, #8d4128, #c5803d);
-  color: #fffdf8;
-  border-color: transparent;
-}
+  .topbar-actions {
+    justify-content: flex-start;
+  }
 
   .carousel-stage,
   .carousel-stage img {
@@ -970,9 +1279,138 @@ th {
     bottom: 14px;
   }
 
-  .service-grid,
-  .astrologer-grid,
-  .horoscope-grid {
+  .astrologer-grid {
     grid-template-columns: 1fr;
   }
+
+  .horoscope-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .service-track .site-card {
+    flex-basis: 78%;
+  }
+}
+
+.planet-table .flag-col {
+  width: 2.2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.planet-table td,
+.planet-table th {
+  white-space: nowrap;
+}
+
+.table-note {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* ---- Vedic rashi reference pages ---- */
+.zodiac-page {
+  display: grid;
+  gap: 20px;
+  /* Full breadth. The shared .app-shell padding still keeps content off the edge. */
+  max-width: none;
+  margin: 0;
+}
+
+/* Only the rashi hero is centred, and only on this page - .hero is shared with
+   the home, generate and report pages, which stay left-aligned. */
+.zodiac-page .hero {
+  max-width: none;
+  margin: 0 0 8px;
+  justify-items: center;
+  text-align: center;
+}
+
+/* Centred by the grid above; the measure keeps the tagline readable when the
+   viewport is very wide. */
+.zodiac-page .hero .hero-copy {
+  max-width: 76ch;
+}
+
+.zodiac-sanskrit {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.zodiac-prose {
+  margin: 0;
+  line-height: 1.8;
+}
+
+/* Single column, full width, with the panel padding giving the text its margins. */
+.zodiac-page .panel {
+  padding: 26px 30px;
+}
+
+
+
+.zodiac-traits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.zodiac-traits h4 {
+  margin: 0 0 10px;
+  color: var(--accent-strong);
+}
+
+.zodiac-list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+  line-height: 1.6;
+}
+
+.zodiac-list.positive li::marker {
+  color: #2f7a2a;
+}
+
+.zodiac-list.negative li::marker {
+  color: var(--accent);
+}
+
+.zodiac-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zodiac-chips li {
+  padding: 10px 14px;
+  background: rgba(255, 243, 205, 0.8);
+  border: 1px solid var(--line);
+  font-weight: 600;
+}
+
+.zodiac-nav li {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.zodiac-nav button {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 252, 238, 0.9);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.zodiac-nav button:hover,
+.zodiac-nav button.active {
+  color: #fff8e3;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
 }

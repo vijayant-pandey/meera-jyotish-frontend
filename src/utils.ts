@@ -43,3 +43,13 @@ export function canGenerateFromPlace(place: ResolvedPlace | null): boolean {
 export function effectivePrecision(basePrecision: Precision, manuallyEdited: boolean): Precision {
   return manuallyEdited ? "manual" : basePrecision;
 }
+
+/** Renders a degree-within-sign as AstroSage does, e.g. 15.8025 -> "15-48-13". */
+export function formatDms(degreeInSign: number): string {
+  const totalSeconds = Math.round(degreeInSign * 3600);
+  const degrees = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${pad(degrees)}-${pad(minutes)}-${pad(seconds)}`;
+}
