@@ -53,3 +53,24 @@ export function formatDms(degreeInSign: number): string {
   const pad = (value: number) => String(value).padStart(2, "0");
   return `${pad(degrees)}-${pad(minutes)}-${pad(seconds)}`;
 }
+
+/** Four-letter Sanskrit rashi abbreviations, indexed by sign number - 1. */
+export const RASHI_ABBR = [
+  "Mesh", "Vrsh", "Mith", "Kark", "Simh", "Kany",
+  "Tula", "Vrsc", "Dhan", "Maka", "Kumb", "Meen"
+];
+
+/** Renders a position the way classical tables do: 24 deg Kumb 01' 02". */
+export function formatPosition(degreeInSign: number, signNumber: number): string {
+  const total = Math.round(degreeInSign * 3600);
+  const degrees = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const seconds = total % 60;
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${pad(degrees)}° ${RASHI_ABBR[signNumber - 1]} ${pad(minutes)}′ ${pad(seconds)}″`;
+}
+
+/** "3, 10 Bhava" - or a dash when the graha rules nothing. */
+export function formatBhavas(houses: number[] | undefined): string {
+  return houses && houses.length > 0 ? `${houses.join(", ")} Bhava` : "-";
+}

@@ -69,6 +69,28 @@ export function findZodiacSign(slug: string): ZodiacSign | undefined {
   );
 }
 
+/**
+ * Merge an admin override onto a sign. Only the prose fields are replaceable, and
+ * only when non-empty, so a blank box in the admin panel means "use the built-in
+ * text" rather than wiping the page.
+ */
+export function withZodiacOverride(
+  sign: ZodiacSign,
+  override: Partial<Pick<ZodiacSign, "tagline" | "personality" | "career" | "relationships" | "health" | "finance">> | undefined
+): ZodiacSign {
+  if (!override) {
+    return sign;
+  }
+  const merged = { ...sign };
+  for (const key of ["tagline", "personality", "career", "relationships", "health", "finance"] as const) {
+    const value = override[key];
+    if (typeof value === "string" && value.trim()) {
+      merged[key] = value;
+    }
+  }
+  return merged;
+}
+
 export const ZODIAC_SIGNS: ZodiacSign[] = [
   {
     slug: "aries",
