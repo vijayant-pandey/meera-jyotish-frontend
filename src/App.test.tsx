@@ -11,18 +11,14 @@ const apiMocks = vi.hoisted(() => ({
   logout: vi.fn(),
   register: vi.fn(),
   resolvePlace: vi.fn(),
+  // Added when the home page gained the panchang section; the App mock must
+  // cover every export the tree reaches or vitest fails the whole render.
+  fetchPanchang: vi.fn(),
+  subscribeEmail: vi.fn(),
+  submitFeedback: vi.fn(),
 }));
 
-vi.mock("./api", () => ({
-  autocompletePlaces: apiMocks.autocompletePlaces,
-  createReport: apiMocks.createReport,
-  getCurrentUser: apiMocks.getCurrentUser,
-  getReport: apiMocks.getReport,
-  login: apiMocks.login,
-  logout: apiMocks.logout,
-  register: apiMocks.register,
-  resolvePlace: apiMocks.resolvePlace,
-}));
+vi.mock("./api", () => apiMocks);
 
 describe("App place autocomplete", () => {
   beforeEach(() => {

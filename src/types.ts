@@ -52,8 +52,15 @@ export interface PlanetPosition {
   retrograde: boolean;
   nakshatra: NakshatraInfo;
   combust?: boolean;
-  /** null for Rahu and Ketu, which own no sign and so have no dignity. */
+  sanskritName?: string;
+  /** How the graha regards the lord of the sign it occupies. */
   relation?: string | null;
+  /** Exalted / Debilitated / Mooltrikona / Own Sign. Separate from relation. */
+  dignity?: string;
+  /** KP sub lord. */
+  subLord?: string;
+  signLord?: string;
+  housesRuled?: number[];
 }
 
 export interface AscendantPosition {
@@ -62,6 +69,9 @@ export interface AscendantPosition {
   signName: string;
   degreeInSign: number;
   nakshatra: NakshatraInfo;
+  subLord?: string;
+  signLord?: string;
+  housesRuled?: number[];
 }
 
 export interface Panchang {
@@ -201,4 +211,91 @@ export interface SignupRequest {
 export interface LoginRequest {
   identifier: string;
   password: string;
+}
+
+export interface PanchangInterval {
+  name: string;
+  endsAt: string;
+  number: number;
+  extra: string;
+}
+
+export interface PanchangSegment {
+  name: string;
+  startsAt: string;
+  endsAt: string;
+  number: number;
+  extra: string;
+}
+
+/** Sunrise-to-sunrise bands, the data behind the panchang chart. */
+export interface PanchangTimeline {
+  sunrise: string;
+  sunset: string;
+  nextSunrise: string;
+  vara: string;
+  tithi: PanchangSegment[];
+  nakshatra: PanchangSegment[];
+  yoga: PanchangSegment[];
+  karana: PanchangSegment[];
+  choghadiya: PanchangSegment[];
+}
+
+export interface PanchangGraha {
+  name: string;
+  sanskrit: string;
+  sign: string;
+  longitude: number;
+  degreeInSign: number;
+  motion: string;
+  visibility: string;
+}
+
+export interface DailyPanchang {
+  location: string;
+  timezone: string;
+  moment: string;
+  day: string;
+  weekday: string;
+  sunrise: string;
+  sunset: string;
+  dayLength: string;
+  vara: string;
+  paksha: string;
+  tithi: PanchangInterval;
+  nakshatra: PanchangInterval;
+  yoga: PanchangInterval;
+  karanas: PanchangInterval[];
+  moonsign: string;
+  sunsign: string;
+  amantaMonth: string;
+  purnimantaMonth: string;
+  shakaSamvat: string;
+  vikramSamvat: string;
+  gujaratiSamvat: string;
+  pravishte: number;
+  ghati: number;
+  pal: number;
+  vipal: number;
+  timeline: PanchangTimeline;
+  grahas: PanchangGraha[];
+}
+
+export interface FestivalEntry {
+  name: string;
+  occursOn: string;
+  imageUrl: string;
+  note: string;
+}
+
+export interface PlanetaryEventEntry {
+  title: string;
+  occursAt: string;
+  note: string;
+}
+
+export interface RashifalEntry {
+  sign: string;
+  text: string;
+  imageUrl: string;
 }
