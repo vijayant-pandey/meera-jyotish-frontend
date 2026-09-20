@@ -1,5 +1,5 @@
-import type { DivisionalChartEntry, KundaliReport } from "../types";
-import { formatDateTime } from "../utils";
+import type { DivisionalChartEntry, KundaliReport, PlanetPosition } from "../types";
+import { formatDateTime, formatDms } from "../utils";
 import DashaExplorer from "./DashaExplorer";
 import NorthIndianChart from "./NorthIndianChart";
 
@@ -10,6 +10,14 @@ interface ResultsPanelProps {
   onChartSelect: (chartKey: string) => void;
   onOpenOverview: () => void;
   onOpenDasha: () => void;
+}
+
+// Rahu and Ketu are always retrograde, so a D/R flag says nothing about them.
+function motionFlag(planet: PlanetPosition): string {
+  if (planet.name === "Rahu" || planet.name === "Ketu") {
+    return "-";
+  }
+  return planet.retrograde ? "R" : "D";
 }
 
 function SummaryPanels({ report }: { report: KundaliReport }) {
@@ -78,31 +86,54 @@ function SummaryPanels({ report }: { report: KundaliReport }) {
           <h3>Sign and House Positions</h3>
         </div>
         <div className="table-wrap">
-          <table>
+          <table className="planet-table">
             <thead>
               <tr>
-                <th>Planet</th>
-                <th>Sign</th>
+                <th>Planets</th>
+                <th className="flag-col">C</th>
+                <th className="flag-col">R</th>
+                <th>Rashi</th>
                 <th>House</th>
-                <th>Degree</th>
+                <th>Longitude</th>
                 <th>Nakshatra</th>
+                <th>Pada</th>
+                <th>Relation</th>
               </tr>
             </thead>
             <tbody>
+              {result.ascendant && (
+                <tr>
+                  <td>Asc</td>
+                  <td className="flag-col" />
+                  <td className="flag-col" />
+                  <td>{result.ascendant.signName}</td>
+                  <td>1</td>
+                  <td>{formatDms(result.ascendant.degreeInSign)}</td>
+                  <td>{result.ascendant.nakshatra.name}</td>
+                  <td>{result.ascendant.nakshatra.pada}</td>
+                  <td />
+                </tr>
+              )}
               {result.planets.map((planet) => (
                 <tr key={planet.name}>
                   <td>{planet.name}</td>
+                  <td className="flag-col">{planet.combust ? "C" : ""}</td>
+                  <td className="flag-col">{motionFlag(planet)}</td>
                   <td>{planet.signName}</td>
                   <td>{planet.houseNumber}</td>
-                  <td>{planet.degreeInSign.toFixed(4)} deg</td>
-                  <td>
-                    {planet.nakshatra.name} P{planet.nakshatra.pada}
-                  </td>
+                  <td>{formatDms(planet.degreeInSign)}</td>
+                  <td>{planet.nakshatra.name}</td>
+                  <td>{planet.nakshatra.pada}</td>
+                  <td>{planet.relation ?? ""}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        <p className="table-note">
+          <strong>Note:</strong> [C] Combust &middot; [D] Direct &middot; [R] Retrograde.
+          Longitude is degrees-minutes-seconds within the sign.
+        </p>
       </article>
     </>
   );
@@ -115,6 +146,28 @@ function resolveSelectedChart(
   return divisionalCharts.find((chart) => chart.key === activeChartKey) ?? divisionalCharts[0];
 }
 
+// The Rashi, Bhava Chalit and Navamsa charts are read side by side, so the row
+// shows the selected chart first and then fills the other two slots. Backfilling
+// from this list keeps the row at three cards without ever repeating one.
+const COMPANION_CHART_KEYS = ["CHALIT", "D9", "D1"];
+
+export function buildChartRow(
+  divisionalCharts: DivisionalChartEntry[],
+  selectedChart: DivisionalChartEntry
+): DivisionalChartEntry[] {
+  const row = [selectedChart];
+  for (const key of COMPANION_CHART_KEYS) {
+    if (row.length >= 3) {
+      break;
+    }
+    const entry = divisionalCharts.find((chart) => chart.key === key);
+    if (entry && !row.some((chart) => chart.key === entry.key)) {
+      row.push(entry);
+    }
+  }
+  return row;
+}
+
 export function ResultsPanel({
   report,
   view,
@@ -125,6 +178,7 @@ export function ResultsPanel({
 }: ResultsPanelProps) {
   const { result } = report;
   const selectedChart = resolveSelectedChart(result.divisionalCharts, activeChartKey);
+  const chartRow = buildChartRow(result.divisionalCharts, selectedChart);
   const birthTimeZone = result.birthContext.timezone;
 
   return (
@@ -181,12 +235,21 @@ export function ResultsPanel({
         </div>
       </div>
 
-      <NorthIndianChart
-        chart={result.chart}
-        divisionalCharts={result.divisionalCharts}
-        selectedChartKey={selectedChart.key}
-        onSelectChart={onChartSelect}
-      />
+      <div className="chart-row">
+        {chartRow.map((entry, index) => (
+          <NorthIndianChart
+            key={entry.key}
+            chart={entry.chart}
+            divisionalCharts={index === 0 ? result.divisionalCharts : undefined}
+            selectedChartKey={index === 0 ? entry.key : undefined}
+            onSelectChart={index === 0 ? onChartSelect : undefined}
+            showSelector={index === 0}
+            eyebrow={index === 0 ? "Selected Chart" : "Companion Chart"}
+            title={entry.title}
+            focus={entry.focus}
+          />
+        ))}
+      </div>
 
       <div className="results-stack">
         {(view === "overview" || view === "chart") && <SummaryPanels report={report} />}
