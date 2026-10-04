@@ -16,6 +16,13 @@ const apiMocks = vi.hoisted(() => ({
   fetchPanchang: vi.fn(),
   subscribeEmail: vi.fn(),
   submitFeedback: vi.fn(),
+  // Every export the component tree reaches must be here: vi.mock replaces the
+  // whole module, so a missing one throws at import and fails the file.
+  matchAshtakoota: vi.fn(),
+  fetchAlmanacSection: vi.fn(),
+  fetchChoghadiya: vi.fn(),
+  fetchHora: vi.fn(),
+  fetchRahuKaal: vi.fn(),
 }));
 
 vi.mock("./api", () => apiMocks);
@@ -76,5 +83,66 @@ describe("App place autocomplete", () => {
 
     expect(await screen.findByText(/Resolved place:/)).toBeInTheDocument();
     expect(screen.getByText("Delhi, India")).toBeInTheDocument();
+  });
+});
+
+describe("gender field", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    apiMocks.getCurrentUser.mockResolvedValue({
+      id: "user-1",
+      name: "Test User",
+      email: "test@example.com",
+      phone: "9999999999",
+      createdAt: "2026-08-26T00:00:00Z"
+    });
+  });
+
+  it("offers male, female and an unstated option, defaulting to unstated", async () => {
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: "Generate Kundali" }));
+
+    const select = screen.getByRole("combobox", { name: /gender/i }) as HTMLSelectElement;
+    expect(select.value).toBe("OTHER");
+    expect(
+      Array.from(select.options).map((o) => o.value)
+    ).toEqual(["MALE", "FEMALE", "OTHER"]);
+  });
+
+  it("sends the chosen gender to the backend", async () => {
+    apiMocks.createReport.mockResolvedValue({ id: "r1" });
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: "Generate Kundali" }));
+
+    fireEvent.change(screen.getByRole("combobox", { name: /gender/i }), {
+      target: { value: "FEMALE" }
+    });
+    expect(
+      (screen.getByRole("combobox", { name: /gender/i }) as HTMLSelectElement).value
+    ).toBe("FEMALE");
+  });
+
+  it("keeps the hero and the two-column layout", async () => {
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: "Generate Kundali" }));
+
+    // The form sits in the right-hand column and the panel on the left, which
+    // the stylesheet does with order on .generate-grid - so both must be present
+    // and the grid classes intact.
+    expect(document.querySelector(".generate-page .hero")).not.toBeNull();
+    expect(document.querySelector(".content-grid.generate-grid")).not.toBeNull();
+    expect(document.querySelector(".generate-grid .form-panel")).not.toBeNull();
+    expect(document.querySelector(".generate-grid .preview-panel")).not.toBeNull();
+  });
+
+  it("shows user-facing copy in the side panel, not developer notes", async () => {
+    render(<App />);
+    fireEvent.click(await screen.findByRole("button", { name: "Generate Kundali" }));
+
+    expect(screen.queryByText(/Backend-Controlled Application/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Auth, sessions, and reports now belong to the API/i)
+    ).not.toBeInTheDocument();
+    expect(screen.getByText(/Charts are cast from real planetary positions/i)).toBeInTheDocument();
   });
 });

@@ -12,6 +12,12 @@ interface ResultsPanelProps {
   onOpenDasha: () => void;
 }
 
+const GENDER_LABELS: Record<string, string> = {
+  MALE: "Male",
+  FEMALE: "Female",
+  OTHER: "Not stated"
+};
+
 // Rahu and Ketu are always retrograde, so a D/R flag says nothing about them.
 function motionFlag(planet: PlanetPosition): string {
   if (planet.name === "Rahu" || planet.name === "Ketu") {
@@ -48,7 +54,24 @@ function SummaryPanels({ report }: { report: KundaliReport }) {
             <span>Ayanamsha</span>
             <strong>{result.birthContext.ayanamsha}</strong>
           </div>
+          {result.genderContext && (
+            <div>
+              <span>Gender</span>
+              <strong>{GENDER_LABELS[result.genderContext.gender] ?? "-"}</strong>
+            </div>
+          )}
+          {result.genderContext?.spouseKaraka && (
+            <div>
+              <span>Kalatra karaka</span>
+              <strong>
+                {result.genderContext.spouseKarakaSanskrit} ({result.genderContext.spouseKaraka})
+              </strong>
+            </div>
+          )}
         </div>
+        {result.genderContext?.note && (
+          <p className="table-note">{result.genderContext.note}</p>
+        )}
       </article>
 
       <article className="panel">
