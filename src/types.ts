@@ -2,6 +2,7 @@ export type Precision = "city" | "admin" | "country" | "manual";
 export type Source = "google" | "osm" | "manual";
 export type Ayanamsha = "LAHIRI" | "RAMAN" | "KP";
 export type Meridiem = "AM" | "PM";
+export type Gender = "MALE" | "FEMALE" | "OTHER";
 
 export interface PlaceSuggestion {
   provider: Source;
@@ -31,6 +32,7 @@ export interface KundaliRequest {
   birthTime12h: string;
   meridiem: Meridiem;
   ayanamsha: Ayanamsha;
+  gender: Gender;
   place: ResolvedPlace;
 }
 
@@ -166,8 +168,18 @@ export interface BirthContext {
   julianDayUt: number;
 }
 
+/** The only part of a reading that depends on the native’s gender. */
+export interface GenderContext {
+  gender: Gender;
+  /** Kalatra karaka: Venus for a male chart, Jupiter for a female one. */
+  spouseKaraka: string;
+  spouseKarakaSanskrit: string;
+  note: string;
+}
+
 export interface KundaliResponse {
   birthContext: BirthContext;
+  genderContext?: GenderContext | null;
   ascendant?: AscendantPosition | null;
   chart: Chart;
   divisionalCharts: DivisionalChartEntry[];
@@ -298,4 +310,105 @@ export interface RashifalEntry {
   sign: string;
   text: string;
   imageUrl: string;
+}
+
+export interface MatchPartner {
+  name: string;
+  gender: Gender;
+  birthDate: string;
+  placeLabel: string;
+  moonSignName: string;
+  moonSignNumber: number;
+  nakshatraName: string;
+  nakshatraNumber: number;
+  pada: number;
+  nakshatraLord: string;
+}
+
+export interface KootaScore {
+  key: string;
+  name: string;
+  obtained: number;
+  maximum: number;
+  meaning: string;
+}
+
+export interface MatchResponse {
+  boy: MatchPartner;
+  girl: MatchPartner;
+  kootas: KootaScore[];
+  totalObtained: number;
+  totalMaximum: number;
+  percentage: number;
+  verdict: string;
+}
+
+export interface AlmanacColumn {
+  key: string;
+  label: string;
+}
+
+/** Every almanac section shares this shape, so one table renders all of them. */
+export interface AlmanacSection {
+  section: string;
+  title: string;
+  subtitle: string;
+  location: string;
+  columns: AlmanacColumn[];
+  rows: Record<string, string>[];
+  note: string;
+}
+
+export interface ChoghadiyaSlot {
+  name: string;
+  quality: string;
+  tone: string;
+  start: string;
+  end: string;
+  startLabel: string;
+  endLabel: string;
+  rahuKala: boolean;
+}
+
+export interface ChoghadiyaDay {
+  location: string;
+  timezone: string;
+  date: string;
+  weekday: string;
+  dateLabel: string;
+  sunrise: string;
+  sunset: string;
+  nextSunrise: string;
+  sunriseLabel: string;
+  sunsetLabel: string;
+  rahuKalaStart: string;
+  rahuKalaEnd: string;
+  day: ChoghadiyaSlot[];
+  night: ChoghadiyaSlot[];
+  note: string;
+}
+
+export interface RahuWheelSlice {
+  period: number;
+  weekday: string;
+}
+
+export interface RahuKaal {
+  location: string;
+  timezone: string;
+  date: string;
+  weekday: string;
+  dateLabel: string;
+  sunrise: string;
+  sunset: string;
+  sunriseLabel: string;
+  sunsetLabel: string;
+  start: string;
+  end: string;
+  startLabel: string;
+  endLabel: string;
+  durationLabel: string;
+  period: number;
+  weekdayWheel: RahuWheelSlice[];
+  note: string;
 }

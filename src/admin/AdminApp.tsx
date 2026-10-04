@@ -111,7 +111,7 @@ export function AdminApp({ onExit }: { onExit: () => void }) {
       <header className="admin-topbar">
         <div>
           <p className="eyebrow">Administration</p>
-          <strong>Kundali site content</strong>
+          <strong>Meera Astrology site content</strong>
         </div>
         <div className="admin-topbar-actions">
           <span>Signed in as {admin.name}</span>
