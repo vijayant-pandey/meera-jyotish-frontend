@@ -88,7 +88,7 @@ export function SiteFooter({ description, copyright, version, onNavigate }: Site
         <div className="footer-top">
           <div className="footer-brand">
             <p className="footer-logo">
-              <span>Astro</span>Kundali
+              <span>Meera</span> Astrology
             </p>
             <p className="footer-description">{description}</p>
           </div>
