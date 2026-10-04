@@ -7,6 +7,10 @@ import type {
   KundaliRequest,
   KundaliResponse,
   DailyPanchang,
+  AlmanacSection,
+  ChoghadiyaDay,
+  RahuKaal,
+  MatchResponse,
   PlaceSuggestion,
   ResolvedPlace,
   Source
@@ -150,4 +154,72 @@ export function fetchPanchang(
     label
   });
   return request(`/api/panchang?${params.toString()}`);
+}
+
+export function matchAshtakoota(
+  boy: KundaliRequest,
+  girl: KundaliRequest
+): Promise<MatchResponse> {
+  return request("/api/match/ashtakoota", {
+    method: "POST",
+    body: JSON.stringify({ boy, girl })
+  });
+}
+
+export function fetchAlmanacSection(
+  section: string,
+  place: { lat: number; lng: number; timezone: string; label: string },
+  options: { on?: string; months?: number } = {}
+): Promise<AlmanacSection> {
+  const params = new URLSearchParams({
+    lat: String(place.lat),
+    lng: String(place.lng),
+    tz: place.timezone,
+    label: place.label
+  });
+  if (options.on) params.set("on", options.on);
+  if (options.months) params.set("months", String(options.months));
+  return request(`/api/almanac/${section}?${params.toString()}`);
+}
+
+export function fetchChoghadiya(
+  place: { lat: number; lng: number; timezone: string; label: string },
+  on?: string
+): Promise<ChoghadiyaDay> {
+  const params = new URLSearchParams({
+    lat: String(place.lat),
+    lng: String(place.lng),
+    tz: place.timezone,
+    label: place.label
+  });
+  if (on) params.set("on", on);
+  return request(`/api/almanac/choghadiya-detail?${params.toString()}`);
+}
+
+export function fetchHora(
+  place: { lat: number; lng: number; timezone: string; label: string },
+  on?: string
+): Promise<ChoghadiyaDay> {
+  const params = new URLSearchParams({
+    lat: String(place.lat),
+    lng: String(place.lng),
+    tz: place.timezone,
+    label: place.label
+  });
+  if (on) params.set("on", on);
+  return request(`/api/almanac/hora-detail?${params.toString()}`);
+}
+
+export function fetchRahuKaal(
+  place: { lat: number; lng: number; timezone: string; label: string },
+  on?: string
+): Promise<RahuKaal> {
+  const params = new URLSearchParams({
+    lat: String(place.lat),
+    lng: String(place.lng),
+    tz: place.timezone,
+    label: place.label
+  });
+  if (on) params.set("on", on);
+  return request(`/api/almanac/rahu-kaal?${params.toString()}`);
 }

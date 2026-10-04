@@ -14,6 +14,11 @@ import type { AuthUser } from "./auth";
 import AuthPage, { type LoginFormState, type SignupFormState } from "./components/AuthPage";
 import ComingSoonPage from "./components/ComingSoonPage";
 import HomePage from "./components/HomePage";
+import AlmanacPage, { ALMANAC_ROUTES } from "./components/AlmanacPage";
+import ChoghadiyaPage from "./components/ChoghadiyaPage";
+import HoraPage from "./components/HoraPage";
+import RahuKaalPage from "./components/RahuKaalPage";
+import MatchMakingPage from "./components/MatchMakingPage";
 import NotFoundPage from "./components/NotFoundPage";
 import AdminApp from "./admin/AdminApp";
 import ResultsPanel from "./components/ResultsPanel";
@@ -36,6 +41,7 @@ import { findZodiacSign, withZodiacOverride, ZODIAC_SIGNS } from "./zodiac";
 import { useSiteContent } from "./useSiteContent";
 import type {
   Ayanamsha,
+  Gender,
   KundaliReport,
   Meridiem,
   PlaceSuggestion,
@@ -47,6 +53,7 @@ import { canGenerateFromPlace, effectivePrecision, isValidTime12h } from "./util
 
 type FormState = {
   name: string;
+  gender: Gender;
   birthDate: string;
   birthTime12h: string;
   meridiem: Meridiem;
@@ -55,6 +62,7 @@ type FormState = {
 
 const INITIAL_FORM: FormState = {
   name: "",
+  gender: "OTHER",
   birthDate: "",
   birthTime12h: "",
   meridiem: "AM",
@@ -457,6 +465,7 @@ function App() {
       setGenerating(true);
       const createdReport = await createReport({
         name: form.name.trim(),
+        gender: form.gender,
         birthDate: form.birthDate,
         birthTime12h: form.birthTime12h,
         meridiem: form.meridiem,
@@ -498,7 +507,7 @@ function App() {
   };
 
   const renderGeneratePage = () => (
-    <div className="app-shell">
+    <div className="app-shell generate-page">
       <div className="hero">
         <div>
           <p className="eyebrow">Kundali Generator</p>
@@ -525,6 +534,27 @@ function App() {
                 onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
                 placeholder="Enter full name"
               />
+            </label>
+
+            <label>
+              <span>Gender</span>
+              <select
+                value={form.gender}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    gender: event.target.value as Gender
+                  }))
+                }
+              >
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Prefer not to say</option>
+              </select>
+              <small className="field-note">
+                Sets the kalatra karaka (Shukra for a male chart, Guru for a female one).
+                Positions, charts and dasha are astronomical and do not change.
+              </small>
             </label>
 
             <div className="place-search" ref={placeSearchRef}>
@@ -708,11 +738,11 @@ function App() {
 
         <section className="preview-panel">
           <div className="placeholder panel">
-            <p className="eyebrow">Backend-Controlled Application</p>
-            <h2>Auth, sessions, and reports now belong to the API.</h2>
+            <p className="eyebrow">Swiss Ephemeris</p>
+            <h2>Charts are cast from real planetary positions.</h2>
             <p>
-              Protected report URLs are backed by the database and the current backend session, not
-              browser-managed users.
+              Positions come from the Swiss Ephemeris at your exact birth moment and resolved
+              coordinates, with your chosen ayanamsha applied.
             </p>
           </div>
         </section>
@@ -851,6 +881,24 @@ function App() {
         return <ComingSoonPage title={humanizeSlug(sectionSlug)} />;
       }
       return <NotFoundPage path={route.path} onGoHome={() => navigate({ name: "home" })} />;
+    }
+    if (route.slug === "match-making") {
+      return <MatchMakingPage />;
+    }
+    if (route.slug === "chaughadiya") {
+      return <ChoghadiyaPage />;
+    }
+    if (route.slug === "hora") {
+      return <HoraPage />;
+    }
+    if (route.slug === "rahu-kalam") {
+      return <RahuKaalPage />;
+    }
+    // Any slug the almanac registry knows is rendered by the one generic table
+    // page rather than by a component per section.
+    const almanacRoute = ALMANAC_ROUTES[route.slug];
+    if (almanacRoute) {
+      return <AlmanacPage route={almanacRoute} />;
     }
     // The homepage links each rashi to /sections/<sign>-horoscope, so a zodiac
     // slug resolves to the reference page and anything else stays a placeholder.
