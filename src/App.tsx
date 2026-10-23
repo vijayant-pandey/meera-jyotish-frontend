@@ -18,6 +18,11 @@ import AlmanacPage, { ALMANAC_ROUTES } from "./components/AlmanacPage";
 import ChoghadiyaPage from "./components/ChoghadiyaPage";
 import HoraPage from "./components/HoraPage";
 import RahuKaalPage from "./components/RahuKaalPage";
+import EclipsePage from "./components/EclipsePage";
+import SeasonPage from "./components/SeasonPage";
+import LunarDaysPage from "./components/LunarDaysPage";
+import PlanetEventsPage from "./components/PlanetEventsPage";
+import PlanetPositionsPage from "./components/PlanetPositionsPage";
 import MatchMakingPage from "./components/MatchMakingPage";
 import NotFoundPage from "./components/NotFoundPage";
 import AdminApp from "./admin/AdminApp";
@@ -893,6 +898,38 @@ function App() {
     }
     if (route.slug === "rahu-kalam") {
       return <RahuKaalPage />;
+    }
+    const goTo = (path: string) => navigate(parseRoute(path));
+    if (route.slug === "full-moon-dates" || route.slug === "new-moon-dates") {
+      return <LunarDaysPage kind={route.slug === "full-moon-dates" ? "purnima" : "amavasya"} onNavigate={goTo} />;
+    }
+    if (route.slug === "planetary-positions") {
+      return <PlanetPositionsPage onNavigate={goTo} />;
+    }
+    if (route.slug === "graha-asta-uday") {
+      return <PlanetEventsPage mode="asta" onNavigate={goTo} />;
+    }
+    if (route.slug === "graha-vakri-margi") {
+      return <PlanetEventsPage mode="vakri" onNavigate={goTo} />;
+    }
+    if (route.slug === "graha-gochara") {
+      return <PlanetEventsPage mode="gochara" onNavigate={goTo} />;
+    }
+    if (
+      route.slug === "vernal-equinox" ||
+      route.slug === "summer-solstice" ||
+      route.slug === "autumnal-equinox" ||
+      route.slug === "winter-solstice"
+    ) {
+      return <SeasonPage event={route.slug} onNavigate={(path) => navigate(parseRoute(path))} />;
+    }
+    if (route.slug === "solar-eclipse" || route.slug === "lunar-eclipse") {
+      return (
+        <EclipsePage
+          kind={route.slug === "solar-eclipse" ? "solar" : "lunar"}
+          onNavigate={(path) => navigate(parseRoute(path))}
+        />
+      );
     }
     // Any slug the almanac registry knows is rendered by the one generic table
     // page rather than by a component per section.
