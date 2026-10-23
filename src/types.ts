@@ -412,3 +412,160 @@ export interface RahuKaal {
   weekdayWheel: RahuWheelSlice[];
   note: string;
 }
+
+export type EclipseKind = "solar" | "lunar";
+
+export interface EclipseContact {
+  label: string;
+  time: string;
+  /** Whether the Sun or Moon is above the horizon at this contact. */
+  visible: boolean | null;
+}
+
+export interface EclipseSutak {
+  begins: string;
+  ends: string;
+  kidsBegins: string;
+  kidsEnds: string;
+}
+
+export interface Eclipse {
+  kind: EclipseKind;
+  globalType: string;
+  localType: string | null;
+  title: string;
+  date: string;
+  weekday: string;
+  globalMaximum: string;
+  globalBegins: string | null;
+  globalEnds: string | null;
+  visible: boolean;
+  visibility: string;
+  contacts: EclipseContact[];
+  durations: { label: string; value: string }[];
+  magnitudes: { label: string; value: string }[];
+  horizonEvents: { event: "rise" | "set"; time: string }[];
+  sutak: EclipseSutak | null;
+}
+
+export interface EclipseYear {
+  kind: EclipseKind;
+  year: number;
+  location: string;
+  timezone: string;
+  eclipses: Eclipse[];
+  upcoming: string | null;
+  previous: string | null;
+  next: string | null;
+  note: string;
+}
+
+export type SeasonEvent = "vernal-equinox" | "summer-solstice" | "autumnal-equinox" | "winter-solstice";
+
+export interface SeasonDetail {
+  event: SeasonEvent;
+  title: string;
+  alias: string;
+  year: number;
+  location: string;
+  timezone: string;
+  moment: string;
+  date: string;
+  weekday: string;
+  sunrise: string;
+  sunset: string;
+  dayDuration: string;
+  previousDayDuration: string;
+  nextDayDuration: string;
+  nightDuration: string;
+  seasons: { event: SeasonEvent; title: string; moment: string }[];
+  note: string;
+}
+
+export type LunarDayKind = "purnima" | "amavasya";
+
+export interface LunarDayEntry {
+  date: string;
+  weekday: string;
+  names: string[];
+  paksha: string;
+  begins: string;
+  ends: string;
+}
+
+export interface LunarDayYear {
+  kind: LunarDayKind;
+  year: number;
+  timezone: string;
+  entries: LunarDayEntry[];
+  next: { name: string; date: string } | null;
+  note: string;
+}
+
+export type TransitDivision = "rashi" | "nakshatra" | "pada";
+
+export interface PlanetTransitYear {
+  planet: string;
+  english: string;
+  sanskrit: string;
+  division: TransitDivision;
+  year: number;
+  timezone: string;
+  startsIn: string;
+  current: string | null;
+  entries: { name: string; time: string; retrograde: boolean }[];
+}
+
+export interface PlanetRetrogradeYear {
+  planet: string;
+  english: string;
+  sanskrit: string;
+  year: number;
+  timezone: string;
+  periods: { retrograde: string; direct: string; retrogradeAt: string; directAt: string; days: number }[];
+  totalDays: number;
+}
+
+export interface PlanetCombustionYear {
+  planet: string;
+  english: string;
+  sanskrit: string;
+  year: number;
+  timezone: string;
+  orb: number;
+  orbRetrograde: number | null;
+  periods: { starts: string; ends: string; startsAt: string; endsAt: string; retrograde: boolean; days: number }[];
+  totalDays: number;
+}
+
+export interface PlanetPositionRow {
+  name: string;
+  english: string;
+  kind: "lagna" | "graha" | "node-alt";
+  longitude: string;
+  sign: string;
+  fullDegree: number;
+  nakshatra: string;
+  pada: number;
+  nakshatraLord: string;
+  subLord: string;
+  latitude: string;
+  speed: number;
+  rightAscension: number;
+  declination: number;
+  retrograde: boolean;
+  combust: boolean;
+  motion: string;
+  dignity: string;
+  relation: string;
+}
+
+export interface PlanetPositions {
+  moment: string;
+  timezone: string;
+  ayanamsha: "lahiri" | "raman" | "kp" | "tropical";
+  ayanamshaValue: string;
+  trueNodes: boolean;
+  ascendantSign: number;
+  rows: PlanetPositionRow[];
+}
