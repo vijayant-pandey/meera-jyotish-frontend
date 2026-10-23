@@ -10,6 +10,17 @@ import type {
   AlmanacSection,
   ChoghadiyaDay,
   RahuKaal,
+  EclipseKind,
+  EclipseYear,
+  SeasonDetail,
+  SeasonEvent,
+  LunarDayKind,
+  LunarDayYear,
+  TransitDivision,
+  PlanetTransitYear,
+  PlanetRetrogradeYear,
+  PlanetCombustionYear,
+  PlanetPositions,
   MatchResponse,
   PlaceSuggestion,
   ResolvedPlace,
@@ -222,4 +233,86 @@ export function fetchRahuKaal(
   });
   if (on) params.set("on", on);
   return request(`/api/almanac/rahu-kaal?${params.toString()}`);
+}
+
+export function fetchEclipseYear(
+  kind: EclipseKind,
+  place: { lat: number; lng: number; timezone: string; label: string },
+  year?: number
+): Promise<EclipseYear> {
+  const params = new URLSearchParams({
+    kind,
+    lat: String(place.lat),
+    lng: String(place.lng),
+    tz: place.timezone,
+    label: place.label
+  });
+  if (year) params.set("year", String(year));
+  return request(`/api/almanac/eclipse-year?${params.toString()}`);
+}
+
+export function fetchSeason(
+  event: SeasonEvent,
+  place: { lat: number; lng: number; timezone: string; label: string },
+  year?: number
+): Promise<SeasonDetail> {
+  const params = new URLSearchParams({
+    event,
+    lat: String(place.lat),
+    lng: String(place.lng),
+    tz: place.timezone,
+    label: place.label
+  });
+  if (year) params.set("year", String(year));
+  return request(`/api/almanac/season?${params.toString()}`);
+}
+
+type PlaceQuery = { lat: number; lng: number; timezone: string; label: string };
+
+function yearQuery(params: Record<string, string>, year?: number): string {
+  const search = new URLSearchParams(params);
+  if (year) search.set("year", String(year));
+  return search.toString();
+}
+
+export function fetchLunarDays(kind: LunarDayKind, place: PlaceQuery, year?: number): Promise<LunarDayYear> {
+  return request(
+    `/api/almanac/lunar-days?${yearQuery(
+      { kind, lat: String(place.lat), lng: String(place.lng), tz: place.timezone },
+      year
+    )}`
+  );
+}
+
+export function fetchPlanetTransits(
+  planet: string,
+  division: TransitDivision,
+  place: PlaceQuery,
+  year?: number
+): Promise<PlanetTransitYear> {
+  return request(`/api/almanac/planet-transits?${yearQuery({ planet, division, tz: place.timezone }, year)}`);
+}
+
+export function fetchPlanetRetrogrades(planet: string, place: PlaceQuery, year?: number): Promise<PlanetRetrogradeYear> {
+  return request(`/api/almanac/planet-retrogrades?${yearQuery({ planet, tz: place.timezone }, year)}`);
+}
+
+export function fetchPlanetCombustions(planet: string, place: PlaceQuery, year?: number): Promise<PlanetCombustionYear> {
+  return request(`/api/almanac/planet-combustions?${yearQuery({ planet, tz: place.timezone }, year)}`);
+}
+
+export function fetchPlanetPositions(
+  place: PlaceQuery,
+  options: { at?: string; ayanamsha?: string; trueNodes?: boolean; outer?: boolean }
+): Promise<PlanetPositions> {
+  const search = new URLSearchParams({
+    lat: String(place.lat),
+    lng: String(place.lng),
+    tz: place.timezone
+  });
+  if (options.at) search.set("at", options.at);
+  if (options.ayanamsha) search.set("ayanamsha", options.ayanamsha);
+  if (options.trueNodes) search.set("trueNodes", "true");
+  if (options.outer === false) search.set("outer", "false");
+  return request(`/api/almanac/planet-positions?${search.toString()}`);
 }
