@@ -56,7 +56,10 @@ export type ApiSiteContent = {
   festivals: FestivalEntry[];
   planetaryEvents: PlanetaryEventEntry[];
   rashifal: RashifalEntry[];
+  pageImages?: ApiPageImage[];
 };
+
+export type ApiPageImage = { key: string; imageUrl: string; credit: string };
 
 /** The prose fields an admin may override. The derived facts are not here on
  *  purpose: lord, element, quality and nakshatras come from the chart tables. */
@@ -72,6 +75,8 @@ export type SiteContentState = {
   festivals: FestivalEntry[];
   planetaryEvents: PlanetaryEventEntry[];
   rashifal: RashifalEntry[];
+  /** The admin's image for a slot, if one is set. */
+  pageImage: (key: string) => ApiPageImage | undefined;
   /** True once a real response has been applied; false while showing built-in content. */
   fromApi: boolean;
 };
@@ -150,6 +155,7 @@ export function useSiteContent(): SiteContentState {
     festivals: content?.festivals ?? [],
     planetaryEvents: content?.planetaryEvents ?? [],
     rashifal: content?.rashifal ?? [],
+    pageImage: (key) => (content?.pageImages ?? []).find((entry) => entry.key === key && entry.imageUrl),
     fromApi: content !== null
   };
 }

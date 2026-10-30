@@ -4,6 +4,7 @@ import type { LunarDayKind, LunarDayYear } from "../types";
 import { ClockModes, YearStrip, placeDate } from "./astroControls";
 import { formatTime, type ClockMode } from "./EclipsePage";
 import PlacePicker, { loadStoredPlace, type PickedPlace } from "./PlacePicker";
+import { ImageCredit, bannerProps, useImageSlot } from "./Photo";
 
 const COPY: Record<LunarDayKind, { title: string; alias: string; other: string; otherPath: string }> = {
   purnima: {
@@ -44,6 +45,7 @@ export function LunarDaysPage({
   kind: LunarDayKind;
   onNavigate: (path: string) => void;
 }) {
+  const banner = useImageSlot(kind === "purnima" ? "banner.full-moon-dates" : "banner.new-moon-dates", kind === "purnima" ? "full-moon" : "amavasya-diyas");
   const copy = COPY[kind];
   const [place, setPlace] = useState<PickedPlace>(() => loadStoredPlace());
   const [year, setYear] = useState(() => new Date().getFullYear());
@@ -82,7 +84,7 @@ export function LunarDaysPage({
 
   return (
     <main className="app-shell choghadiya-page lunar-days-page">
-      <header className="cg-banner ec-banner">
+      <header className={`cg-banner ec-banner ${bannerProps(banner).className}`} style={bannerProps(banner).style}>
         <div>
           <p className="cg-banner-title">Vrat and Upavasa &rsaquo; {kind === "purnima" ? "Purnima Dates" : "Amavasya Dates"}</p>
           <h1 className="ec-title">
@@ -100,6 +102,7 @@ export function LunarDaysPage({
             {copy.other}
           </button>
         </nav>
+        <ImageCredit image={banner} className="on-banner" />
       </header>
 
       <YearStrip year={year} onChange={setYear} />

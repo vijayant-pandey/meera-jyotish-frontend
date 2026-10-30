@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchAlmanacSection } from "../api";
 import type { AlmanacSection } from "../types";
 import PlacePicker, { loadStoredPlace, type PickedPlace } from "./PlacePicker";
+import type { PhotoKey } from "../photos";
+import { ImageCredit, bannerProps, useImageSlot } from "./Photo";
 
 /** Astrological glyphs for the hora lords. */
 const PLANET_GLYPH: Record<string, string> = {
@@ -64,22 +66,26 @@ export type AlmanacRoute = {
   section: string;
   /** Heading shown while loading, before the server's own title arrives. */
   label: string;
+  /** Banner photograph, when the section has a fitting one. */
+  photo?: PhotoKey;
+  /** The admin panel's image slot that can replace that photograph. */
+  imageSlot?: string;
 };
 
 /** slug under /sections/ -> which backend section renders it. */
 export const ALMANAC_ROUTES: Record<string, AlmanacRoute> = {
   "rahu-kalam": { section: "muhurta", label: "Rahu Kalam" },
-  "abhijit-nakshatra": { section: "muhurta", label: "Abhijit Muhurta" },
-  muhurt: { section: "muhurta", label: "Muhurta" },
+  "abhijit-nakshatra": { section: "muhurta", label: "Abhijit Muhurta", photo: "samrat-yantra", imageSlot: "banner.muhurta" },
+  muhurt: { section: "muhurta", label: "Muhurta", photo: "samrat-yantra", imageSlot: "banner.muhurta" },
   hora: { section: "hora", label: "Hora" },
   chaughadiya: { section: "chaughadiya", label: "Choghadiya" },
   "solar-eclipse": { section: "eclipses", label: "Solar Eclipse" },
   "lunar-eclipse": { section: "eclipses", label: "Lunar Eclipse" },
   "graha-vakri-margi": { section: "retrogrades", label: "Graha Vakri and Margi" },
   "graha-asta-uday": { section: "retrogrades", label: "Graha Motion" },
-  festivals: { section: "festivals", label: "Festivals" },
-  vrat: { section: "festivals", label: "Vrat" },
-  "yearly-festival-calendar": { section: "festivals", label: "Festival Calendar" }
+  festivals: { section: "festivals", label: "Festivals", photo: "festival-diyas", imageSlot: "banner.festivals" },
+  vrat: { section: "festivals", label: "Vrat", photo: "puja-offerings", imageSlot: "banner.vrat" },
+  "yearly-festival-calendar": { section: "festivals", label: "Festival Calendar", photo: "festival-diyas", imageSlot: "banner.festivals" }
 };
 
 /**
@@ -104,6 +110,8 @@ function groupRows(rows: Record<string, string>[]): [string, Record<string, stri
 }
 
 export function AlmanacPage({ route }: { route: AlmanacRoute }) {
+  // Every route calls the hook; only routes with a photo render the banner.
+  const banner = useImageSlot(route.imageSlot ?? "", route.photo ?? "samrat-yantra");
   // Remembered across pages, so the location is picked once not per section.
   const [place, setPlace] = useState<PickedPlace>(() => loadStoredPlace());
   const [day, setDay] = useState<string>(() => isoDay(new Date()));
@@ -139,12 +147,16 @@ export function AlmanacPage({ route }: { route: AlmanacRoute }) {
 
   return (
     <main className="app-shell almanac-page">
-      <header className="page-head">
+      <header
+        className={route.photo ? `page-head ${bannerProps(banner).className}` : "page-head"}
+        style={route.photo ? bannerProps(banner).style : undefined}
+      >
         <h1>{data?.title ?? route.label}</h1>
         <p>
           {data?.subtitle ?? "Calculated from the ephemeris."}
           {data?.location ? ` · ${data.location}` : ""}
         </p>
+        {route.photo && <ImageCredit image={banner} className="on-banner" />}
       </header>
 
       <div className="almanac-controls">

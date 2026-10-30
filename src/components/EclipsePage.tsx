@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchEclipseYear } from "../api";
 import type { Eclipse, EclipseKind, EclipseYear } from "../types";
 import PlacePicker, { loadStoredPlace, type PickedPlace } from "./PlacePicker";
+import { ImageCredit, bannerProps, useImageSlot } from "./Photo";
 
 export type ClockMode = "12" | "24" | "24plus";
 
@@ -336,6 +337,7 @@ export function EclipsePage({
   kind: EclipseKind;
   onNavigate: (path: string) => void;
 }) {
+  const banner = useImageSlot(`banner.${kind}-eclipse`, kind === "solar" ? "solar-eclipse" : "lunar-eclipse");
   const copy = COPY[kind];
   const [place, setPlace] = useState<PickedPlace>(() => loadStoredPlace());
   // Undefined lets the server open on the year of the next eclipse.
@@ -373,7 +375,7 @@ export function EclipsePage({
 
   return (
     <main className="app-shell choghadiya-page eclipse-page">
-      <header className="cg-banner ec-banner">
+      <header className={`cg-banner ec-banner ${bannerProps(banner).className}`} style={bannerProps(banner).style}>
         <div>
           <p className="cg-banner-title">Astronomy Events &rsaquo; Eclipse List</p>
           <h1 className="ec-title">
@@ -391,6 +393,7 @@ export function EclipsePage({
             {COPY[copy.other].name}
           </button>
         </nav>
+        <ImageCredit image={banner} className="on-banner" />
       </header>
 
       <nav className="cg-strip ec-years" aria-label="Year">
