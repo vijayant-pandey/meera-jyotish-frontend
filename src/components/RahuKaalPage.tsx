@@ -3,6 +3,7 @@ import { fetchRahuKaal } from "../api";
 import type { RahuKaal } from "../types";
 import AlmanacPage, { ALMANAC_ROUTES } from "./AlmanacPage";
 import PlacePicker, { loadStoredPlace, type PickedPlace } from "./PlacePicker";
+import { ImageCredit, bannerProps, useImageSlot } from "./Photo";
 
 const MONTHS = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -129,6 +130,7 @@ function WeekdayWheel({ data }: { data: RahuKaal }) {
 }
 
 export function RahuKaalPage() {
+  const banner = useImageSlot("banner.rahu-kalam", "samrat-yantra");
   const [place, setPlace] = useState<PickedPlace>(() => loadStoredPlace());
   const [day, setDay] = useState<string>(() => isoDay(new Date()));
   const [mode, setMode] = useState<ClockMode>("12");
@@ -175,7 +177,7 @@ export function RahuKaalPage() {
 
   return (
     <main className="app-shell choghadiya-page rahu-page">
-      <header className="cg-banner">
+      <header className={`cg-banner ${bannerProps(banner).className}`} style={bannerProps(banner).style}>
         <div className="cg-banner-main rk-banner-main">
           <p className="cg-banner-title">Rahu Kaal Today</p>
           <div className="rk-banner-row">
@@ -200,6 +202,7 @@ export function RahuKaalPage() {
           </span>
           <span>{data?.weekday ?? ""}</span>
         </div>
+        <ImageCredit image={banner} className="on-banner" />
       </header>
 
       <div className="cg-modes" role="group" aria-label="Clock format">

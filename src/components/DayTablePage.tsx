@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ChoghadiyaDay } from "../types";
 import type { ChoghadiyaSlot } from "../types";
 import PlacePicker, { loadStoredPlace, type PickedPlace } from "./PlacePicker";
+import { ImageCredit, bannerProps, useImageSlot } from "./Photo";
 
 export type ClockMode = "12" | "24" | "24plus";
 
@@ -146,6 +147,8 @@ function SlotRow({
 }
 
 export type DayTableConfig = {
+  /** The admin panel's image slot for this page's banner. */
+  imageSlot?: string;
   /** Banner heading, e.g. "Aaj Ka Choghadiya" or "Running Hora". */
   bannerTitle: string;
   dayTitle: string;
@@ -160,6 +163,7 @@ export type DayTableConfig = {
 };
 
 export function DayTablePage({ config }: { config: DayTableConfig }) {
+  const banner = useImageSlot(config.imageSlot ?? "banner.chaughadiya", "samrat-yantra");
   const [place, setPlace] = useState<PickedPlace>(() => loadStoredPlace());
   const [day, setDay] = useState<string>(() => isoDay(new Date()));
   const [mode, setMode] = useState<ClockMode>("12");
@@ -210,7 +214,7 @@ export function DayTablePage({ config }: { config: DayTableConfig }) {
 
   return (
     <main className={`app-shell choghadiya-page ${config.className ?? ""}`}>
-      <header className="cg-banner">
+      <header className={`cg-banner ${bannerProps(banner).className}`} style={bannerProps(banner).style}>
         <div className="cg-banner-main">
           <p className="cg-banner-title">{config.bannerTitle}</p>
           {running ? (
@@ -238,6 +242,7 @@ export function DayTablePage({ config }: { config: DayTableConfig }) {
           </span>
           <span>{data?.weekday ?? ""}</span>
         </div>
+        <ImageCredit image={banner} className="on-banner" />
       </header>
 
       <div className="cg-modes" role="group" aria-label="Clock format">

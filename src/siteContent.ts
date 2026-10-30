@@ -1,3 +1,5 @@
+import { PHOTOS } from "./photos";
+
 export type SitePage = "home" | "generate" | "login" | "signup" | "coming-soon";
 
 export type NavItem = {
@@ -32,58 +34,32 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "More 5", page: "coming-soon", comingSoonTitle: "More 5" }
 ];
 
-function svgImage(title: string, subtitle: string, from: string, to: string): string {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460">
-      <defs>
-        <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stop-color="${from}"/>
-          <stop offset="100%" stop-color="${to}"/>
-        </linearGradient>
-        <radialGradient id="glow" cx="30%" cy="25%" r="70%">
-          <stop offset="0%" stop-color="#fff1d6" stop-opacity="0.88"/>
-          <stop offset="100%" stop-color="#fff1d6" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <rect width="900" height="460" fill="url(#bg)"/>
-      <rect width="900" height="460" fill="url(#glow)"/>
-      <circle cx="720" cy="105" r="82" fill="#ffd187" opacity="0.25"/>
-      <circle cx="760" cy="360" r="150" fill="#540000" opacity="0.16"/>
-      <path d="M90 360 L220 190 L350 360 Z" fill="none" stroke="#fff1d6" stroke-width="5" opacity="0.42"/>
-      <path d="M550 360 L680 190 L810 360 Z" fill="none" stroke="#fff1d6" stroke-width="5" opacity="0.35"/>
-      <text x="70" y="205" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="64" font-weight="700" fill="#fff1d6">${title}</text>
-      <text x="74" y="260" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="25" fill="#fff1d6" opacity="0.86">${subtitle}</text>
-    </svg>
-  `;
-
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-}
 
 export const HERO_SLIDES: CardContent[] = [
   {
     title: "Birth Chart",
     text: "North India style kundali with precise ascendant and planetary details.",
-    image: svgImage("Birth Chart", "Know your planetary blueprint", "#a60000", "#ffc15e")
+    image: PHOTOS["brihajjataka"].src
   },
   {
     title: "Match-Making",
     text: "Prepare for compatibility tools, guna matching, and relationship insights.",
-    image: svgImage("Match-Making", "Compatibility insights coming soon", "#940000", "#eaac5b")
+    image: PHOTOS["wedding-fire"].src
   },
   {
     title: "Daily Horoscope",
     text: "A dedicated horoscope experience will be connected from this homepage.",
-    image: svgImage("Horoscope", "Twelve signs, one cosmic story", "#7b0000", "#ffd187")
+    image: PHOTOS["night-sky"].src
   },
   {
     title: "Lal Kitab",
     text: "Future remedial astrology pages can plug into this navigation.",
-    image: svgImage("Lal Kitab", "Remedies and guidance coming soon", "#a60000", "#ffd78c")
+    image: PHOTOS["puja-offerings"].src
   },
   {
     title: "Western Astrology",
     text: "Reserve space for tropical charts and western-style interpretations.",
-    image: svgImage("Western", "A new astrology section for later", "#8c0000", "#d57e2f")
+    image: PHOTOS["prague-clock"].src
   }
 ];
 
@@ -91,43 +67,43 @@ export const SERVICE_CARDS: CardContent[] = [
   {
     title: "Generate Kundali",
     text: "Create an accurate North India birth chart using resolved coordinates and timezone.",
-    image: svgImage("Kundali", "D1 to D60 varga chart support", "#a60000", "#ffc15e"),
+    image: "/images/services/kundali.svg",
     actionLabel: "Open Generator"
   },
   {
     title: "Match-Making",
     text: "A future space for compatibility, guna milan, and marriage guidance.",
-    image: svgImage("Match", "Compatibility tools", "#9c0000", "#f7be67")
+    image: "/images/services/match-making.svg"
   },
   {
     title: "Horoscope",
     text: "Daily, weekly, and monthly horoscope pages can be added here.",
-    image: svgImage("Signs", "Zodiac guidance", "#8c0000", "#ffc15e")
+    image: "/images/services/horoscope.svg"
   },
   {
     title: "Astrology",
     text: "Build detailed astrology learning, predictions, and consultation pages.",
-    image: svgImage("Astrology", "Planetary wisdom", "#a60000", "#eaac5b")
+    image: "/images/services/astrology.svg"
   },
   {
     title: "Occult",
     text: "A dedicated section for numerology, tarot, and occult topics later.",
-    image: svgImage("Occult", "Mystic studies", "#540000", "#d57e2f")
+    image: "/images/services/occult.svg"
   },
   {
     title: "Lal Kitab",
     text: "Remedial astrology with its own house rules, debts, and practical upaya.",
-    image: svgImage("Lal Kitab", "Remedies and upaya", "#a60000", "#ffd78c")
+    image: "/images/services/lal-kitab.svg"
   },
   {
     title: "Western Astrology",
     text: "Tropical charts, aspects, and western-style interpretation alongside Vedic.",
-    image: svgImage("Western", "Tropical charts", "#8c0000", "#d57e2f")
+    image: "/images/services/western-astrology.svg"
   },
   {
     title: "Panchang",
     text: "Daily tithi, nakshatra, yoga, karana, and muhurat for choosing the right moment.",
-    image: svgImage("Panchang", "Tithi and muhurat", "#a60000", "#ffc15e")
+    image: "/images/services/panchang.svg"
   }
 ];
 
@@ -148,29 +124,11 @@ export type Astrologer = {
   callEnabled?: boolean;
 };
 
-/** Square portrait placeholder with the astrologer's initials. */
-function avatarImage(initials: string, from: string, to: string): string {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-      <defs>
-        <linearGradient id="a" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stop-color="${from}"/>
-          <stop offset="100%" stop-color="${to}"/>
-        </linearGradient>
-      </defs>
-      <rect width="200" height="200" fill="url(#a)"/>
-      <circle cx="100" cy="78" r="34" fill="#fff1d6" opacity="0.9"/>
-      <path d="M40 200 C40 150 70 126 100 126 C130 126 160 150 160 200 Z" fill="#fff1d6" opacity="0.9"/>
-      <text x="100" y="188" text-anchor="middle" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="26" font-weight="700" fill="${from}">${initials}</text>
-    </svg>
-  `;
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-}
 
 export const ASTROLOGERS: Astrologer[] = [
   {
     name: "Astro Rajneesh",
-    avatar: avatarImage("AR", "#a60000", "#ffc15e"),
+    avatar: "/images/astrologers/rajneesh.svg",
     languages: ["Hindi", "English", "Punjabi"],
     skills: ["Vedic", "Numerology", "Tarot", "Vastu", "KP", "Prashna"],
     rating: 4.0,
@@ -182,7 +140,7 @@ export const ASTROLOGERS: Astrologer[] = [
   },
   {
     name: "Astro Uttam",
-    avatar: avatarImage("AU", "#940000", "#eaac5b"),
+    avatar: "/images/astrologers/uttam.svg",
     languages: ["Hindi", "English"],
     skills: ["Vedic", "Numerology", "Vastu", "KP", "Prashna"],
     rating: 4.0,
@@ -194,7 +152,7 @@ export const ASTROLOGERS: Astrologer[] = [
   },
   {
     name: "Astro Vasudha",
-    avatar: avatarImage("AV", "#a60000", "#ffd78c"),
+    avatar: "/images/astrologers/vasudha.svg",
     languages: ["Hindi", "English"],
     skills: ["Vedic", "Numerology", "Tarot", "Vastu", "KP", "Prashna"],
     rating: 5.0,
@@ -206,7 +164,7 @@ export const ASTROLOGERS: Astrologer[] = [
   },
   {
     name: "Astro Meera",
-    avatar: avatarImage("AM", "#7b0000", "#ffd187"),
+    avatar: "/images/astrologers/meera.svg",
     languages: ["Hindi", "Marathi", "English"],
     skills: ["Vedic", "Lal Kitab", "Prashna", "Muhurat"],
     rating: 4.5,
@@ -218,7 +176,7 @@ export const ASTROLOGERS: Astrologer[] = [
   },
   {
     name: "Astro Kartik",
-    avatar: avatarImage("AK", "#a60000", "#ffc15e"),
+    avatar: "/images/astrologers/kartik.svg",
     languages: ["Hindi", "English", "Bengali"],
     skills: ["KP", "Vedic", "Vastu", "Numerology"],
     rating: 4.2,
@@ -230,7 +188,7 @@ export const ASTROLOGERS: Astrologer[] = [
   },
   {
     name: "Astro Sharada",
-    avatar: avatarImage("AS", "#9c0000", "#ffc15e"),
+    avatar: "/images/astrologers/sharada.svg",
     languages: ["Hindi", "Telugu", "English"],
     skills: ["Vedic", "Tarot", "Numerology", "Muhurat", "Prashna"],
     rating: 4.8,
@@ -258,7 +216,7 @@ export const HOROSCOPE_SIGNS: CardContent[] = [
 ].map((sign) => ({
   title: sign,
   text: `${sign} horoscope`,
-  image: svgImage(sign, "Click to open later", "#860000", "#f7be67")
+  image: `/images/zodiac/${sign.toLowerCase()}.svg`
 }));
 
 export type FooterLink = {

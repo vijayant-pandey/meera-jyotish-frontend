@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { matchAshtakoota } from "../api";
 import type { KundaliRequest, MatchPartner, MatchResponse } from "../types";
 import BirthDetailsForm from "./BirthDetailsForm";
+import { ImageCredit, bannerProps, useImageSlot } from "./Photo";
 
 function PartnerSummary({ partner, role }: { partner: MatchPartner; role: string }) {
   return (
@@ -110,6 +111,7 @@ export function MatchResultPanel({ result }: { result: MatchResponse }) {
 }
 
 export function MatchMakingPage() {
+  const banner = useImageSlot("banner.match-making", "wedding-fire");
   const [boy, setBoy] = useState<KundaliRequest | null>(null);
   const [girl, setGirl] = useState<KundaliRequest | null>(null);
   const [result, setResult] = useState<MatchResponse | null>(null);
@@ -140,9 +142,10 @@ export function MatchMakingPage() {
 
   return (
     <main className="app-shell match-page">
-      <header className="page-head">
+      <header className={`page-head ${bannerProps(banner).className}`} style={bannerProps(banner).style}>
         <h1>Kundali Milan</h1>
         <p>Ashtakoota guna milan, scored out of 36.</p>
+        <ImageCredit image={banner} className="on-banner" />
       </header>
 
       <div className="match-grid">

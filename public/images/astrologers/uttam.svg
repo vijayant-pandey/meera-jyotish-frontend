@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+<defs><linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7b2d00"/><stop offset="1" stop-color="#eaac5b"/></linearGradient></defs>
+<rect width="200" height="200" fill="url(#a)"/><circle cx="100" cy="100" r="88" fill="#fff1d6" opacity="0.14"/><path d="M30 200 C34 150 66 132 100 132 C134 132 166 150 170 200 Z" fill="#fff1d6"/><path d="M88 134 L100 160 L112 134 Z" fill="#e58a2b"/><ellipse cx="100" cy="96" rx="30" ry="36" fill="#e7b98a"/><path d="M68 96 C60 50 140 50 132 96 C130 82 120 72 100 72 C80 72 70 82 68 96 Z" fill="#2b1608"/><path d="M97 70 L103 70 L101 86 L99 86 Z" fill="#a60000"/><rect x="132" y="150" width="56" height="34" rx="17" fill="#3f0000" opacity="0.85"/><text x="160" y="173" text-anchor="middle" font-family="Segoe UI, Roboto, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" fill="#fff1d6">AU</text>
+</svg>

@@ -55,6 +55,7 @@ import type {
   Source
 } from "./types";
 import { canGenerateFromPlace, effectivePrecision, isValidTime12h } from "./utils";
+import { PhotoFigure, useImageSlot } from "./components/Photo";
 
 type FormState = {
   name: string;
@@ -75,6 +76,7 @@ const INITIAL_FORM: FormState = {
 };
 
 function App() {
+  const generateArt = useImageSlot("page.generate", "brihajjataka");
   const siteContent = useSiteContent();
   const [route, setRoute] = useState<AppRoute>(() => parseRoute(window.location.pathname));
   const [pendingRoute, setPendingRoute] = useState<AppRoute | null>(null);
@@ -513,7 +515,8 @@ function App() {
 
   const renderGeneratePage = () => (
     <div className="app-shell generate-page">
-      <div className="hero">
+      <div className="hero has-art">
+        <PhotoFigure image={generateArt} className="hero-art" />
         <div>
           <p className="eyebrow">Kundali Generator</p>
           <h1>Generate a precise North India birth chart.</h1>
