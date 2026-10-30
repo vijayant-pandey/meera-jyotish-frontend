@@ -1,16 +1,19 @@
 :root {
   color-scheme: light;
-  --bg: #edf2f3;
-  --bg-strong: #d9e4e7;
-  --panel: rgba(255, 253, 247, 0.94);
-  --panel-strong: #fffaf0;
-  --text: #132535;
-  --muted: #587080;
-  --line: rgba(21, 55, 75, 0.16);
-  --accent: #ad6819;
-  --accent-strong: #71400a;
-  --shadow: 0 20px 46px rgba(22, 53, 72, 0.12);
-  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  --bg: #d57e2f;
+  --bg-strong: #c96500;
+  --panel: rgba(255, 241, 214, 0.97);
+  --panel-strong: #fff1d6;
+  --text: #000000;
+  --muted: #4d1b00;
+  --line: rgba(145, 55, 24, 0.5);
+  --accent: #a60000;
+  --accent-strong: #540000;
+  --shadow: 0 20px 46px rgba(77, 27, 0, 0.28);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -22,9 +25,9 @@ body {
   min-height: 100vh;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(255, 249, 231, 0.95), transparent 38%),
-    radial-gradient(circle at bottom right, rgba(194, 137, 54, 0.16), transparent 36%),
-    linear-gradient(180deg, #e9f0f2 0%, var(--bg) 100%);
+    radial-gradient(circle at top left, rgba(255, 215, 140, 0.96), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(255, 193, 94, 0.32), transparent 36%),
+    linear-gradient(180deg, #e08c3a 0%, var(--bg) 100%);
 }
 
 button,
@@ -46,9 +49,9 @@ select {
   gap: 18px;
   align-items: center;
   padding: 14px 24px;
-  background: rgba(15, 42, 59, 0.97);
-  color: #fffaf0;
-  box-shadow: 0 12px 28px rgba(12, 38, 54, 0.2);
+  background: rgba(166, 0, 0, 0.97);
+  color: #fff1d6;
+  box-shadow: 0 12px 28px rgba(84, 0, 0, 0.34);
 }
 
 .brand-button,
@@ -64,7 +67,7 @@ select {
 }
 
 .brand-button {
-  color: #fffaf0;
+  color: #fff1d6;
   background: transparent;
   font-size: 1.35rem;
   font-weight: 700;
@@ -82,19 +85,19 @@ select {
 .ghost-button,
 .topbar-primary {
   padding: 10px 16px;
-  border-radius: 999px;
+  border-radius: 0;
   font-weight: 700;
 }
 
 .ghost-button {
-  color: #fffaf0;
-  background: rgba(255, 250, 240, 0.12);
-  border: 1px solid rgba(255, 250, 240, 0.26);
+  color: #fff1d6;
+  background: rgba(255, 241, 214, 0.2);
+  border: 1px solid rgba(255, 241, 214, 0.34);
 }
 
 .topbar-primary {
   color: var(--accent-strong);
-  background: #f9d792;
+  background: #ffc15e;
 }
 
 .site-navbar {
@@ -102,26 +105,44 @@ select {
   top: 61px;
   z-index: 35;
   display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 12px 20px;
-  background: rgba(249, 241, 229, 0.95);
+  gap: 0;
+  /* No horizontal scrolling. Items shrink to share the width, and wrap to a
+     second row only when there is genuinely no room left. */
+  flex-wrap: wrap;
+  overflow-x: visible;
+  padding: 0 16px;
+  background: rgba(255, 209, 135, 0.96);
   border-bottom: 1px solid var(--line);
 }
 
 .site-navbar button {
-  flex: 0 0 auto;
-  padding: 10px 15px;
-  border-radius: 999px;
+  /* auto basis, not 0: flexbox decides wrapping from the basis, so a zero basis
+     would make every item "fit" and let the labels overflow instead of wrapping.
+     With auto they grow to fill a wide bar and wrap to a second row only when the
+     labels genuinely no longer fit. */
+  flex: 1 1 auto;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  padding: 13px 6px;
+  font-size: 0.87rem;
+  border-radius: 0;
   color: var(--text);
-  background: rgba(255, 251, 244, 0.78);
-  border: 1px solid rgba(105, 74, 43, 0.14);
+  background: transparent;
+  /* Menu items sit flush against each other and are separated by a single rule,
+     rather than each being its own outlined pill. */
+  border: 0;
+  border-right: 1px solid var(--line);
   font-weight: 700;
+}
+
+.site-navbar button:first-child {
+  border-left: 1px solid var(--line);
 }
 
 .site-navbar button.active,
 .site-navbar button:hover {
-  color: #fff8ed;
+  color: #fff1d6;
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
 }
 
@@ -136,7 +157,7 @@ select {
   max-width: 1280px;
   padding: 30px;
   background:
-    linear-gradient(140deg, rgba(255, 247, 233, 0.96), rgba(234, 214, 182, 0.88)),
+    linear-gradient(140deg, rgba(255, 209, 135, 0.96), rgba(234, 172, 91, 0.92)),
     var(--panel);
   border: 1px solid var(--line);
   border-radius: 28px;
@@ -147,10 +168,9 @@ select {
 .placeholder h2,
 .panel h2,
 .panel h3 {
-  font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif;
   margin: 0;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 650;
+  letter-spacing: -0.015em;
 }
 
 .hero h1 {
@@ -175,6 +195,12 @@ select {
 .home-intro {
   justify-items: center;
   text-align: center;
+  /* Only this hero spans the full width. .hero is shared, so the cap is lifted
+     here rather than on the base rule. The margin must be reset too: .home-page is
+     a grid container, and auto margins on a grid item switch off stretch, so the
+     box would shrink to its content width and sit centred however wide it may be. */
+  max-width: none;
+  margin: 0 0 28px;
 }
 
 .home-intro h1 {
@@ -200,9 +226,19 @@ select {
   gap: 14px;
 }
 
+/* Full breadth, like the other home sections. The auto margin has to go too:
+   .home-page is a grid container, and an auto margin on a grid item switches
+   off stretch, so the box would sit centred at its content width. */
+.home-page .carousel-section {
+  max-width: none;
+  margin: 0;
+}
+
 .carousel-stage {
   position: relative;
-  min-height: 360px;
+  /* Grows with the width so a full-breadth banner keeps its proportions rather
+     than cropping the artwork into a letterbox. */
+  min-height: clamp(360px, 26vw, 520px);
   overflow: hidden;
   border-radius: 30px;
   border: 1px solid var(--line);
@@ -212,8 +248,9 @@ select {
 
 .carousel-stage img {
   width: 100%;
-  height: 100%;
-  min-height: 360px;
+  /* A fixed banner height: photographs come in every aspect ratio, and letting
+     one set the height would make the slide grow or shrink between slides. */
+  height: clamp(360px, 26vw, 520px);
   object-fit: cover;
   display: block;
 }
@@ -225,9 +262,9 @@ select {
   bottom: 28px;
   max-width: 520px;
   padding: 22px;
-  color: #fff8ed;
-  background: rgba(38, 20, 10, 0.55);
-  border: 1px solid rgba(255, 248, 237, 0.22);
+  color: #fff1d6;
+  background: rgba(77, 27, 0, 0.62);
+  border: 1px solid rgba(255, 193, 94, 0.34);
   border-radius: 24px;
   backdrop-filter: blur(8px);
 }
@@ -238,7 +275,7 @@ select {
 .coming-soon-card h1,
 .page-heading h1 {
   margin: 0;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.015em;
 }
 
 .carousel-caption p:last-child,
@@ -251,7 +288,7 @@ select {
 }
 
 .carousel-caption p:last-child {
-  color: rgba(255, 248, 237, 0.88);
+  color: rgba(255, 193, 94, 0.9);
   margin-bottom: 0;
 }
 
@@ -269,10 +306,10 @@ select {
 .card-button,
 .auth-switch button {
   padding: 10px 14px;
-  border-radius: 999px;
+  border-radius: 0;
   color: var(--accent-strong);
-  background: rgba(255, 249, 241, 0.92);
-  border: 1px solid rgba(105, 74, 43, 0.16);
+  background: rgba(255, 241, 214, 0.96);
+  border: 1px solid rgba(145, 55, 24, 0.42);
   font-weight: 700;
 }
 
@@ -286,8 +323,8 @@ select {
   width: 11px;
   height: 11px;
   padding: 0;
-  border-radius: 999px;
-  background: rgba(93, 58, 29, 0.28);
+  border-radius: 0;
+  background: rgba(145, 55, 24, 0.55);
 }
 
 .carousel-dots button.active {
@@ -301,7 +338,7 @@ select {
   gap: 18px;
   padding: 26px;
   border-radius: 30px;
-  background: rgba(253, 248, 239, 0.62);
+  background: rgba(255, 193, 94, 0.8);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
 }
@@ -320,20 +357,227 @@ select {
   align-items: end;
 }
 
-.service-grid,
 .astrologer-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  /* Three per page; Previous/Next steps through the rest. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+}
+
+/* Full breadth. Auto margin cleared too - .home-page is a grid container and an
+   auto margin on a grid item switches off stretch. */
+.home-page .astrologers-section {
+  max-width: none;
+  margin: 0;
+}
+
+.slider-count {
+  color: var(--muted);
+  font-weight: 700;
+  align-self: center;
+}
+
+.astrologer-card {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  align-content: start;
+  padding: 18px;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.astrologer-ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #fff1d6;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.astrologer-top {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.astrologer-top img {
+  width: 92px;
+  height: 108px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.astrologer-id {
+  min-width: 0;
+}
+
+.astrologer-id h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+}
+
+/* An indicator dot, not a control - it stays round. */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #8a7a60;
+  flex: 0 0 auto;
+}
+
+.status-dot.online {
+  background: #2f9e44;
+}
+
+.astrologer-langs {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.astrologer-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.astrologer-skills li {
+  padding: 4px 8px;
+  background: rgba(255, 193, 94, 0.92);
+  border: 1px solid var(--line);
+  font-size: 0.76rem;
+}
+
+.astrologer-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.astrologer-stats strong {
+  display: block;
+  font-size: 0.98rem;
+}
+
+.astrologer-stats span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.astrologer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.astrologer-rates p {
+  display: grid;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.astrologer-rates s {
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.astrologer-rates em {
+  font-style: normal;
+  font-weight: 700;
+  color: #2f7a2a;
+}
+
+.astrologer-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-button,
+.call-button {
+  padding: 10px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chat-button {
+  background: var(--accent);
+  color: #fff1d6;
+  border: 1px solid var(--accent);
+}
+
+.call-button {
+  background: rgba(255, 193, 94, 0.92);
+  color: var(--accent-strong);
+  border: 1px solid var(--line);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Full breadth. The auto margin has to be cleared too - .home-page is a grid
+   container and auto margins on a grid item switch off stretch. */
+.home-page .services-section {
+  max-width: none;
+  margin: 0;
+}
+
+/* Horizontal strip rather than a fixed grid, so eight cards fit any width and
+   the timer can step through them. Native scrolling keeps it swipeable. */
+.service-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* The track advances itself, so the scrollbar is noise. Scrolling still works
+     by swipe, trackpad and drag - only the bar is hidden. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.service-track::-webkit-scrollbar {
+  display: none;
+}
+
+.service-track .site-card {
+  flex: 0 0 clamp(240px, 23%, 340px);
+  scroll-snap-align: start;
 }
 
 .site-card {
   display: grid;
   overflow: hidden;
   border-radius: 22px;
-  background: rgba(255, 251, 244, 0.95);
-  border: 1px solid rgba(105, 74, 43, 0.14);
-  box-shadow: 0 16px 32px rgba(89, 49, 19, 0.1);
+  background: rgba(255, 241, 214, 0.97);
+  border: 1px solid rgba(145, 55, 24, 0.38);
+  box-shadow: 0 16px 32px rgba(145, 55, 24, 0.34);
 }
 
 .card-img-top {
@@ -366,8 +610,16 @@ select {
 
 .horoscope-grid {
   display: grid;
+  /* Twelve rashis over six columns gives exactly two rows. */
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 14px;
+}
+
+/* Full breadth. Auto margin cleared too - .home-page is a grid container and an
+   auto margin on a grid item switches off stretch. */
+.home-page .horoscope-section {
+  max-width: none;
+  margin: 0;
 }
 
 .horoscope-card {
@@ -375,13 +627,13 @@ select {
   gap: 10px;
   padding: 0 0 14px;
   overflow: hidden;
-  border-radius: 20px;
-  border: 1px solid rgba(105, 74, 43, 0.14);
-  background: rgba(255, 251, 244, 0.95);
+  border-radius: 0;
+  border: 1px solid rgba(145, 55, 24, 0.38);
+  background: rgba(255, 241, 214, 0.97);
   color: var(--text);
   cursor: pointer;
   font-weight: 700;
-  box-shadow: 0 14px 28px rgba(89, 49, 19, 0.09);
+  box-shadow: 0 14px 28px rgba(145, 55, 24, 0.3);
 }
 
 .horoscope-card img {
@@ -449,9 +701,9 @@ select {
 .auth-form input {
   width: 100%;
   padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(105, 74, 43, 0.2);
-  background: rgba(255, 251, 244, 0.95);
+  border-radius: 0;
+  border: 1px solid rgba(145, 55, 24, 0.5);
+  background: rgba(255, 241, 214, 0.97);
   color: var(--text);
 }
 
@@ -466,6 +718,7 @@ select {
   color: var(--accent);
   background: transparent;
   border: 0;
+  text-decoration: underline;
 }
 
 .success-banner {
@@ -481,6 +734,12 @@ select {
   border: 1px solid var(--line);
   border-radius: 26px;
   box-shadow: var(--shadow);
+  /* Padding belongs on the base class. It used to be set only by
+     `.results-stack .panel`, so every panel outside that container - the saved
+     report header, the auth card, the coming-soon card and the loading/error
+     sections - rendered with its content flush against the border. Every
+     variant that wants a different value overrides this later in the file. */
+  padding: 22px;
 }
 
 .form-panel {
@@ -509,16 +768,16 @@ select {
 .kundali-form select {
   width: 100%;
   padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(105, 74, 43, 0.2);
-  background: rgba(255, 251, 244, 0.95);
+  border-radius: 0;
+  border: 1px solid rgba(145, 55, 24, 0.5);
+  background: rgba(255, 241, 214, 0.97);
   color: var(--text);
 }
 
 .kundali-form input:focus,
 .kundali-form select:focus {
-  outline: 2px solid rgba(141, 65, 40, 0.2);
-  border-color: rgba(141, 65, 40, 0.45);
+  outline: 2px solid rgba(145, 55, 24, 0.5);
+  border-color: rgba(166, 0, 0, 0.55);
 }
 
 .two-col,
@@ -557,10 +816,10 @@ select {
   top: calc(100% + 8px);
   left: 0;
   right: 0;
-  background: rgba(255, 249, 241, 0.98);
-  border: 1px solid rgba(105, 74, 43, 0.18);
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(78, 44, 16, 0.18);
+  background: rgba(255, 241, 214, 0.98);
+  border: 1px solid rgba(145, 55, 24, 0.45);
+  border-radius: 0;
+  box-shadow: 0 20px 40px rgba(145, 55, 24, 0.5);
   overflow: hidden;
 }
 
@@ -577,16 +836,16 @@ select {
 }
 
 .suggestion-item + .suggestion-item {
-  border-top: 1px solid rgba(105, 74, 43, 0.08);
+  border-top: 1px solid rgba(145, 55, 24, 0.26);
 }
 
 .suggestion-item:hover {
-  background: rgba(222, 197, 162, 0.25);
+  background: rgba(213, 126, 47, 0.35);
 }
 
 .suggestion-item.active {
-  background: rgba(222, 197, 162, 0.35);
-  outline: 1px solid rgba(141, 65, 40, 0.18);
+  background: rgba(213, 126, 47, 0.45);
+  outline: 1px solid rgba(145, 55, 24, 0.45);
 }
 
 .suggestion-item span,
@@ -600,23 +859,23 @@ select {
   gap: 6px;
   padding: 14px 16px;
   border-radius: 18px;
-  background: rgba(237, 223, 203, 0.55);
-  border: 1px solid rgba(112, 76, 41, 0.15);
+  background: rgba(234, 172, 91, 0.7);
+  border: 1px solid rgba(145, 55, 24, 0.38);
 }
 
 .error-banner {
   padding: 14px 16px;
   border-radius: 18px;
-  color: #6a1d0d;
-  background: rgba(198, 84, 56, 0.12);
-  border: 1px solid rgba(198, 84, 56, 0.24);
+  color: #8a1a00;
+  background: rgba(220, 110, 95, 0.3);
+  border: 1px solid rgba(200, 80, 65, 0.5);
 }
 
 .primary-button {
   padding: 16px 20px;
   border: 0;
-  border-radius: 18px;
-  color: #fff8f2;
+  border-radius: 0;
+  color: #fff1d6;
   background: linear-gradient(135deg, var(--accent), var(--accent-strong));
   cursor: pointer;
   font-weight: 700;
@@ -655,6 +914,93 @@ select {
   gap: 20px;
 }
 
+/* These rules were nested inside the max-width: 720px block and written
+   unindented, so the saved-report header and its section tabs rendered with no
+   styling at all on anything wider than a phone. */
+.report-summary-panel {
+  margin-bottom: 24px;
+}
+
+/* Title left, section tabs right. .panel-header on its own only sets a margin,
+   and the other panels rely on it stacking, so scope the row layout to here. */
+.report-summary-panel .panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.report-section-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.report-section-tabs button {
+  border: 1px solid rgba(145, 55, 24, 0.5);
+  background: #fff1d6;
+  color: #540000;
+  border-radius: 0;
+  padding: 10px 16px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.report-section-tabs button.active {
+  background: linear-gradient(135deg, #a60000, #ffc15e);
+  color: #fff1d6;
+  border-color: transparent;
+}
+
+/* Rashi, Bhava Chalit and Navamsa are compared side by side. */
+.chart-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  /* stretch, not start: every card takes the height of the tallest so the grids
+     below can be bottom-aligned against a shared baseline. */
+  align-items: stretch;
+}
+
+.chart-row .chart-card {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Stack each card's heading: three across leaves no room for the side-by-side
+   title/controls split the single full-width card uses. */
+.chart-row .chart-heading {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.chart-row .chart-controls {
+  min-width: 0;
+}
+
+.chart-row .chart-submeta {
+  max-width: none;
+}
+
+.chart-row .north-chart {
+  max-width: 100%;
+  /* Only the first card carries the Select Chart picker, so its heading is taller
+     and used to push its grid down. Every grid in the row is the same size, so
+     pinning them to the bottom of equal-height cards lines their tops up too -
+     no hard-coded offset that breaks when the heading text wraps differently. */
+  margin-top: auto;
+}
+
+@media (max-width: 1180px) {
+  .chart-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .chart-card,
 .results-stack .panel {
   padding: 22px;
@@ -683,8 +1029,8 @@ select {
   display: grid;
   gap: 6px;
   padding: 12px 14px;
-  border-radius: 16px;
-  background: rgba(245, 235, 218, 0.75);
+  border-radius: 0;
+  background: rgba(255, 193, 94, 0.88);
 }
 
 .chart-selector span,
@@ -696,9 +1042,9 @@ select {
 .chart-selector select {
   width: 100%;
   padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(105, 74, 43, 0.2);
-  background: rgba(255, 251, 244, 0.95);
+  border-radius: 0;
+  border: 1px solid rgba(145, 55, 24, 0.5);
+  background: rgba(255, 241, 214, 0.97);
   color: var(--text);
 }
 
@@ -718,12 +1064,12 @@ select {
 
 .chart-line {
   fill: none;
-  stroke: rgba(19, 67, 91, 0.62);
+  stroke: rgba(166, 0, 0, 0.75);
   stroke-width: 2;
 }
 
 .chart-outline {
-  fill: rgba(255, 253, 247, 0.74);
+  fill: rgba(255, 241, 214, 0.84);
 }
 
 .house-label,
@@ -751,21 +1097,35 @@ select {
 
 .detail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 14px;
 }
 
 .detail-grid div {
   display: grid;
   gap: 6px;
+  /* Grid items default to min-width: auto, so a long unbreakable run pushes past
+     the tile instead of wrapping inside it. */
+  min-width: 0;
   padding: 14px;
   border-radius: 16px;
-  background: rgba(245, 235, 218, 0.7);
+  background: rgba(255, 193, 94, 0.88);
 }
 
 .detail-grid span {
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+.detail-grid div > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The deity line is a sentence, not a one-word fact, so it takes its own row
+   rather than being squeezed into a 160px tile. */
+.detail-grid .fact-wide {
+  grid-column: 1 / -1;
 }
 
 .table-wrap {
@@ -783,7 +1143,7 @@ select {
 .dasha-detail-card {
   padding: 14px;
   border-radius: 16px;
-  background: rgba(245, 235, 218, 0.7);
+  background: rgba(255, 193, 94, 0.88);
 }
 
 .dasha-summary-grid span,
@@ -800,10 +1160,10 @@ select {
 }
 
 .dasha-column {
-  border: 1px solid rgba(97, 67, 33, 0.12);
+  border: 1px solid rgba(145, 55, 24, 0.3);
   border-radius: 18px;
   padding: 14px;
-  background: rgba(255, 250, 243, 0.72);
+  background: rgba(255, 241, 214, 0.82);
 }
 
 .dasha-column-header {
@@ -830,16 +1190,16 @@ select {
   display: grid;
   gap: 4px;
   padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(97, 67, 33, 0.12);
+  border-radius: 0;
+  border: 1px solid rgba(145, 55, 24, 0.3);
   background: rgba(255, 255, 255, 0.62);
   color: var(--text);
   cursor: pointer;
 }
 
 .dasha-button.active {
-  border-color: rgba(141, 65, 40, 0.45);
-  background: rgba(228, 210, 185, 0.68);
+  border-color: rgba(166, 0, 0, 0.55);
+  background: rgba(234, 172, 91, 0.78);
 }
 
 .dasha-detail-card {
@@ -856,7 +1216,7 @@ table {
 th,
 td {
   padding: 12px 10px;
-  border-bottom: 1px solid rgba(97, 67, 33, 0.12);
+  border-bottom: 1px solid rgba(145, 55, 24, 0.3);
   text-align: left;
 }
 
@@ -882,13 +1242,12 @@ th {
     position: static;
   }
 
-  .service-grid,
   .astrologer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .horoscope-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -929,35 +1288,9 @@ th {
     position: static;
   }
 
-.topbar-actions {
-  justify-content: flex-start;
-}
-
-.report-summary-panel {
-  margin-bottom: 24px;
-}
-
-.report-section-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.report-section-tabs button {
-  border: 1px solid rgba(134, 84, 58, 0.2);
-  background: #fff7ec;
-  color: #5f3824;
-  border-radius: 999px;
-  padding: 10px 16px;
-  font: inherit;
-  cursor: pointer;
-}
-
-.report-section-tabs button.active {
-  background: linear-gradient(135deg, #8d4128, #c5803d);
-  color: #fffdf8;
-  border-color: transparent;
-}
+  .topbar-actions {
+    justify-content: flex-start;
+  }
 
   .carousel-stage,
   .carousel-stage img {
@@ -970,9 +1303,3382 @@ th {
     bottom: 14px;
   }
 
-  .service-grid,
-  .astrologer-grid,
-  .horoscope-grid {
+  .astrologer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .horoscope-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .service-track .site-card {
+    flex-basis: 78%;
+  }
+}
+
+.planet-table .flag-col {
+  width: 2.2rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.planet-table td,
+.planet-table th {
+  white-space: nowrap;
+}
+
+.table-note {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* ---- Vedic rashi reference pages ---- */
+.zodiac-page {
+  display: grid;
+  gap: 20px;
+  /* Full breadth. The shared .app-shell padding still keeps content off the edge. */
+  max-width: none;
+  margin: 0;
+}
+
+/* Only the rashi hero is centred, and only on this page - .hero is shared with
+   the home, generate and report pages, which stay left-aligned. */
+.zodiac-page .hero {
+  max-width: none;
+  margin: 0 0 8px;
+  justify-items: center;
+  text-align: center;
+}
+
+/* Centred by the grid above; the measure keeps the tagline readable when the
+   viewport is very wide. */
+.zodiac-page .hero .hero-copy {
+  max-width: 76ch;
+}
+
+.zodiac-sanskrit {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.zodiac-prose {
+  margin: 0;
+  line-height: 1.8;
+}
+
+/* Single column, full width, with the panel padding giving the text its margins. */
+.zodiac-page .panel {
+  padding: 26px 30px;
+}
+
+
+
+.zodiac-traits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.zodiac-traits h4 {
+  margin: 0 0 10px;
+  color: var(--accent-strong);
+}
+
+.zodiac-list {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+  line-height: 1.6;
+}
+
+.zodiac-list.positive li::marker {
+  color: #2f7a2a;
+}
+
+.zodiac-list.negative li::marker {
+  color: var(--accent);
+}
+
+.zodiac-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zodiac-chips li {
+  padding: 10px 14px;
+  background: rgba(255, 193, 94, 0.88);
+  border: 1px solid var(--line);
+  font-weight: 600;
+}
+
+.zodiac-nav li {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.zodiac-nav button {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  background: rgba(255, 241, 214, 0.94);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.zodiac-nav button:hover,
+.zodiac-nav button.active {
+  color: #fff1d6;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+}
+
+.not-found-page code {
+  padding: 2px 6px;
+  background: rgba(255, 193, 94, 0.92);
+  border: 1px solid var(--line);
+  font-family: "Consolas", "Menlo", monospace;
+}
+
+.not-found-page .primary-button {
+  justify-self: start;
+  margin-top: 18px;
+}
+
+/* ---- admin panel ---- */
+.admin-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  background: var(--bg);
+}
+
+.admin-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 24px;
+  background: rgba(166, 0, 0, 0.97);
+  color: #fff1d6;
+}
+
+.admin-topbar .eyebrow {
+  color: rgba(255, 241, 214, 0.82);
+}
+
+.admin-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-topbar-actions button {
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 700;
+  color: #fff1d6;
+  background: rgba(255, 241, 214, 0.2);
+  border: 1px solid rgba(255, 241, 214, 0.34);
+  cursor: pointer;
+}
+
+.admin-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  padding: 0 24px;
+  background: rgba(255, 209, 135, 0.96);
+  border-bottom: 1px solid var(--line);
+}
+
+.admin-nav button {
+  padding: 14px 18px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-right: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.admin-nav button:first-child {
+  border-left: 1px solid var(--line);
+}
+
+.admin-nav button.active,
+.admin-nav button:hover {
+  color: #fff1d6;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+}
+
+.admin-editor {
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.admin-editor-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-editor-head h2 {
+  margin: 0;
+}
+
+.admin-editor-head p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  max-width: 80ch;
+}
+
+.admin-columns {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.admin-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-list li {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+}
+
+.admin-list li.active {
+  border-color: var(--accent);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.admin-list li > button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 14px;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.admin-list li em {
+  font-style: normal;
+  font-size: 0.75rem;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 2px 6px;
+}
+
+.admin-move {
+  display: grid;
+}
+
+.admin-move button {
+  padding: 0 10px;
+  font: inherit;
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-left: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.admin-form {
+  padding: 20px;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+}
+
+.admin-form form {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-field {
+  display: grid;
+  gap: 6px;
+}
+
+.admin-field > span {
+  font-weight: 700;
+}
+
+.admin-field input,
+.admin-field textarea,
+.image-field input[type="text"] {
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  color: var(--text);
+  background: rgba(255, 241, 214, 0.97);
+  border: 1px solid rgba(145, 55, 24, 0.5);
+}
+
+.admin-field small,
+.admin-check small {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.admin-check {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-check small {
+  grid-column: 2;
+}
+
+.admin-form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.danger-button {
+  padding: 16px 20px;
+  font: inherit;
+  font-weight: 700;
+  color: #fff1d6;
+  background: var(--accent-strong);
+  border: 0;
+  cursor: pointer;
+}
+
+.admin-empty {
+  color: var(--muted);
+  padding: 14px;
+}
+
+.image-field {
+  display: grid;
+  gap: 10px;
+}
+
+.image-preview img {
+  max-width: 180px;
+  max-height: 180px;
+  border: 1px solid var(--line);
+}
+
+.image-field-controls {
+  display: grid;
+  gap: 8px;
+}
+
+.image-field-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.image-field-buttons button {
+  padding: 10px 14px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--accent-strong);
+  background: rgba(255, 193, 94, 0.92);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.admin-error {
+  margin: 0;
+  color: var(--accent);
+}
+
+.admin-login code {
+  padding: 2px 6px;
+  background: rgba(255, 193, 94, 0.92);
+  border: 1px solid var(--line);
+  font-family: "Consolas", "Menlo", monospace;
+}
+
+@media (max-width: 980px) {
+  .admin-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- site footer ---- */
+.site-footer {
+  margin-top: 40px;
+  background: var(--accent-strong);
+  color: #fff1d6;
+}
+
+.footer-inner {
+  padding: 40px 24px 28px;
+  display: grid;
+  gap: 30px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.footer-logo {
+  margin: 0 0 12px;
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffc15e;
+}
+
+.footer-logo span {
+  color: #fff1d6;
+}
+
+.footer-description {
+  margin: 0;
+  max-width: 62ch;
+  line-height: 1.7;
+  color: rgba(255, 241, 214, 0.88);
+}
+
+.footer-apps h3,
+.footer-group h3 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+  font-weight: 650;
+  color: #ffc15e;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 193, 94, 0.4);
+}
+
+.footer-app-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.footer-app-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+  color: rgba(255, 241, 214, 0.85);
+}
+
+.footer-app-badge {
+  display: grid;
+  gap: 2px;
+  padding: 10px 18px;
+  text-align: left;
+  font: inherit;
+  color: #fff1d6;
+  background: #000000;
+  border: 1px solid rgba(255, 241, 214, 0.35);
+  cursor: pointer;
+}
+
+.footer-app-badge strong {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footer-app-badge span {
+  font-size: 1.15rem;
+  font-weight: 650;
+}
+
+.footer-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.footer-links {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-links.split {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 20px;
+}
+
+.footer-links a {
+  color: rgba(255, 241, 214, 0.9);
+  text-decoration: none;
+}
+
+.footer-links a:hover,
+.footer-links a:focus-visible {
+  color: #ffc15e;
+  text-decoration: underline;
+}
+
+.footer-forms form {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.footer-forms label {
+  font-weight: 650;
+  color: #fff1d6;
+}
+
+.footer-input-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.footer-input-row input,
+.footer-input-row textarea {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 12px;
+  font: inherit;
+  color: #000000;
+  background: #fffdf8;
+  border: 1px solid rgba(255, 241, 214, 0.35);
+  resize: vertical;
+}
+
+.footer-input-row button {
+  padding: 11px 18px;
+  font: inherit;
+  font-weight: 700;
+  color: #fff1d6;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  cursor: pointer;
+}
+
+.footer-note {
+  margin: 0;
+  color: #ffc15e;
+}
+
+.footer-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 24px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.footer-bar p {
+  margin: 0;
+  color: rgba(255, 241, 214, 0.92);
+}
+
+.footer-version {
+  margin-left: 8px;
+  padding: 2px 8px;
+  color: #000000;
+  background: #fff1d6;
+  font-size: 0.85rem;
+}
+
+.footer-social {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-social a {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffc15e;
+}
+
+.footer-social svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--accent-strong);
+}
+
+@media (max-width: 980px) {
+  .footer-top,
+  .footer-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.planet-table .nowrap {
+  white-space: nowrap;
+}
+
+.graha-alt {
+  display: block;
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 400;
+}
+
+/* ---- nav dropdowns ---- */
+.nav-item {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.nav-item > button {
+  width: 100%;
+  gap: 4px;
+}
+
+.nav-caret {
+  font-size: 0.7em;
+  opacity: 0.75;
+}
+
+.nav-submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 40;
+  min-width: 220px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: #fff1d6;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+/* focus-within as well as hover, so the menu is reachable by keyboard and not
+   only by mouse. */
+.nav-item:hover .nav-submenu,
+.nav-item:focus-within .nav-submenu {
+  display: block;
+}
+
+.nav-submenu li + li {
+  border-top: 1px solid rgba(145, 55, 24, 0.25);
+}
+
+.nav-submenu button {
+  display: block;
+  width: 100%;
+  padding: 11px 14px;
+  font: inherit;
+  font-size: 0.87rem;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.nav-submenu button:hover,
+.nav-submenu button:focus-visible {
+  color: #fff1d6;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+}
+
+/* The last few items would open a menu off the right edge of the screen. */
+.nav-item:nth-last-child(-n + 3) .nav-submenu {
+  left: auto;
+  right: 0;
+}
+
+/* ---- panchang section ---- */
+.panchang-search {
+  position: relative;
+  min-width: min(100%, 260px);
+}
+
+.panchang-search input {
+  width: 100%;
+  padding: 11px 14px;
+  font: inherit;
+  color: var(--text);
+  background: rgba(255, 251, 239, 0.96);
+  border: 1px solid var(--line);
+}
+
+.panchang-suggestions {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 260px;
+  overflow-y: auto;
+  background: #fff1d6;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.panchang-suggestions button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.panchang-suggestions button:hover {
+  color: #fff1d6;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+}
+
+.panchang-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.panchang-card {
+  padding: 18px;
+  background: var(--panel-strong);
+  border: 1px solid var(--line);
+}
+
+.panchang-card h3 {
+  margin: 0 0 12px;
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.panchang-subhead {
+  margin-top: 18px !important;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.panchang-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px dashed rgba(145, 55, 24, 0.28);
+}
+
+.panchang-row:last-child {
+  border-bottom: 0;
+}
+
+.panchang-row span {
+  color: var(--muted);
+}
+
+.panchang-row strong {
+  text-align: right;
+}
+
+.vedic-clock {
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  text-align: center;
+  background: rgba(255, 193, 94, 0.9);
+  border: 1px solid var(--line);
+}
+
+.vedic-clock strong {
+  font-size: 1.9rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.vedic-clock span {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.panchang-grahas {
+  grid-column: 1 / -1;
+}
+
+/* ---- panchang panels, laid out like a classic panchang page ---- */
+/* Full breadth. The auto margin has to be cleared too - .home-page is a grid
+   container and an auto margin on a grid item switches off stretch. */
+.home-page .panchang-section {
+  max-width: none;
+  margin: 0;
+}
+
+.dp-grid {
+  display: grid;
+  /* Fixed three columns rather than auto-fit: across a full-width section
+     auto-fit would keep adding narrow columns, and these panels read best in
+     the three-up arrangement a panchang page uses. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 1180px) {
+  .dp-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .dp-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- sunrise-to-sunrise chart ---- */
+.dp-chart-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.dp-chart-bar .dp-toggle {
+  margin-bottom: 0;
+}
+
+.dp-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.82rem;
+  color: var(--accent-strong);
+}
+
+.dp-chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dp-swatch {
+  width: 16px;
+  height: 10px;
+  border: 1px solid var(--line);
+}
+
+.dp-swatch-day {
+  background: #f3ead0;
+}
+
+.dp-swatch-night {
+  background: #ddd3b2;
+}
+
+.dp-swatch-bad {
+  height: 4px;
+  border: 0;
+  background: var(--accent);
+}
+
+/* The SVG inside is drawn at its measured width, so this only ever scrolls
+   below the minimum width the choghadiya labels need. */
+.dp-chart {
+  max-width: 100%;
+  margin-bottom: 16px;
+  padding: 8px 10px 10px;
+  overflow-x: auto;
+  background: rgba(255, 241, 214, 0.97);
+  border: 1px solid var(--line);
+}
+
+.dp-chart-svg {
+  display: block;
+}
+
+.dp-chart-day {
+  fill: #f3ead0;
+}
+
+.dp-chart-night {
+  fill: #ddd3b2;
+}
+
+.dp-chart-axis,
+.dp-chart-tick,
+.dp-chart-band {
+  stroke: rgba(84, 0, 0, 0.5);
+  stroke-width: 1;
+}
+
+.dp-chart-edge,
+.dp-chart-sunline {
+  stroke: rgba(84, 0, 0, 0.4);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.dp-chart-arrow {
+  fill: #8a2b00;
+}
+
+.dp-chart-sun path {
+  fill: #e6a119;
+  stroke: #8a2b00;
+  stroke-width: 1;
+}
+
+.dp-chart-sun line {
+  stroke: #8a2b00;
+  stroke-width: 1.5;
+}
+
+.dp-chart-sun-set path {
+  fill: #c2571a;
+}
+
+.dp-chart-hour {
+  font-size: 11px;
+  fill: rgba(40, 20, 0, 0.75);
+}
+
+.dp-chart-row-label {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--accent-strong);
+}
+
+.dp-chart-segment {
+  font-size: 12px;
+  fill: var(--accent-strong);
+}
+
+.dp-chart-time,
+.dp-chart-suntime {
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--accent);
+}
+
+.dp-chart-bad {
+  stroke: var(--accent);
+  stroke-width: 4;
+}
+
+.dp-chart-bad-label {
+  font-size: 11px;
+  fill: var(--accent);
+}
+
+.dp-chart-vara {
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--accent-strong);
+}
+
+.dp-panel {
+  background: rgba(255, 241, 214, 0.97);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.dp-panel > header {
+  padding: 11px 14px;
+  font-weight: 700;
+  color: #fff1d6;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+}
+
+.dp-panel-body {
+  padding: 14px;
+  max-height: 520px;
+  overflow-y: auto;
+}
+
+.dp-toggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 12px;
+}
+
+.dp-toggle button {
+  padding: 7px 14px;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  background: rgba(255, 193, 94, 0.9);
+  border: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.dp-toggle button.active {
+  color: #fff1d6;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+}
+
+.dp-place {
+  margin: 0;
+  font-weight: 700;
+}
+
+.dp-date {
+  margin: 2px 0 10px;
+  color: var(--muted);
+}
+
+.panchang-line {
+  margin: 0;
+  padding: 4px 0;
+  line-height: 1.5;
+  border-bottom: 1px dashed rgba(145, 55, 24, 0.22);
+}
+
+.panchang-line:last-child {
+  border-bottom: 0;
+}
+
+.panchang-line span {
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.dp-graha-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dp-graha-table td {
+  padding: 6px 4px;
+  border-bottom: 1px dashed rgba(145, 55, 24, 0.22);
+  white-space: nowrap;
+}
+
+.dp-graha-table td:first-child {
+  font-weight: 700;
+}
+
+.dp-vakri,
+.dp-asta {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.dp-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dp-list li {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed rgba(145, 55, 24, 0.22);
+}
+
+.dp-list li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.dp-list img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+}
+
+.dp-list strong {
+  display: block;
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.dp-list em {
+  font-style: normal;
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.85rem;
+}
+
+.dp-list span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Rashifal entries are paragraphs, so clamp them to keep the panel scannable. */
+.dp-rashifal span {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.dp-clock {
+  display: grid;
+  gap: 2px;
+  padding: 12px;
+  text-align: center;
+  background: rgba(255, 193, 94, 0.9);
+  border: 1px solid var(--line);
+}
+
+.dp-clock strong {
+  font-size: 2rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+}
+
+.dp-clock span {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.dp-clock-gregorian {
+  margin-top: 12px;
+}
+
+.dp-sun-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.dp-samvat {
+  margin: 0;
+  padding-bottom: 10px;
+  text-align: center;
+  color: var(--accent-strong);
+  font-size: 0.88rem;
+  border-bottom: 1px dashed rgba(145, 55, 24, 0.22);
+}
+
+.dp-foot {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYER
+   Appended last so these win on equal specificity. Breakpoints:
+   1180 laptop · 980 tablet · 720 large phone · 560 phone · 420 small phone
+   ========================================================================== */
+
+/* ---- global guards ---- */
+
+/* Raster images must never set the page width. The panchang SVG is deliberately
+   excluded: it is drawn at a natural 900px and scrolls inside .dp-chart. */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Grid and flex children default to min-width:auto, so one long unbreakable
+   string (a timezone id, an email, a nakshatra name) can push a track wider
+   than the screen. */
+.detail-grid > div,
+.dasha-summary-grid > div,
+.astrologer-id,
+.admin-list,
+.admin-form,
+.footer-group,
+.dp-panel-body,
+.panchang-line {
+  min-width: 0;
+}
+
+.place-summary,
+.table-note,
+.dp-foot,
+.zodiac-prose {
+  overflow-wrap: anywhere;
+}
+
+/* Any table wide enough to need it scrolls in its own box rather than
+   stretching the page. */
+.table-wrap,
+.dp-graha-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---- the mobile nav toggle (hidden on desktop) ---- */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 12px 16px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--text);
+  background: rgba(255, 209, 135, 0.96);
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.nav-toggle-bars {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.nav-toggle-bars span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* ---- 1180: laptops ---- */
+@media (max-width: 1180px) {
+  .site-shell,
+  .app-shell {
+    max-width: 100%;
+  }
+
+  .dasha-columns {
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  }
+}
+
+/* ---- 980: tablets ---- */
+@media (max-width: 980px) {
+  .footer-links.split {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .zodiac-traits {
+    grid-template-columns: 1fr;
+  }
+
+  .report-section-tabs,
+  .dp-chart-bar,
+  .dp-chart-legend,
+  .slider-buttons,
+  .carousel-controls {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---- 860: nav collapses to a tap-driven drawer ---- */
+@media (max-width: 860px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .site-navbar {
+    position: static;
+    display: none;
+    flex-direction: column;
+    padding: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .site-navbar.open {
+    display: flex;
+  }
+
+  /* .nav-item is display:flex (row) by default, which is fine while the
+     submenu is absolutely positioned. On mobile it is static, so it would sit
+     beside its parent button unless the item stacks. */
+  .site-navbar .nav-item {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .site-navbar button {
+    width: 100%;
+    justify-content: space-between;
+    text-align: left;
+    padding: 14px 18px;
+    border: 0;
+    border-top: 1px solid var(--line);
+    white-space: normal;
+  }
+
+  .site-navbar button:first-child {
+    border-left: 0;
+  }
+
+  /* On touch there is no hover, so the submenu is driven by an explicit
+     .open class set on tap rather than by :hover. */
+  .nav-submenu {
+    position: static;
+    display: none;
+    min-width: 0;
+    border: 0;
+    box-shadow: none;
+    background: rgba(255, 241, 214, 0.6);
+  }
+
+  .nav-item:hover .nav-submenu {
+    display: none;
+  }
+
+  .nav-item.open .nav-submenu {
+    display: block;
+  }
+
+  .nav-submenu button {
+    padding-left: 34px;
+    white-space: normal;
+  }
+}
+
+/* ---- 720: large phones ---- */
+@media (max-width: 720px) {
+  /* The topbar stops being sticky here, so the navbar must not keep
+     offsetting itself by the topbar's old height. */
+  .site-navbar {
+    top: 0;
+  }
+
+  .hero h1,
+  .app-shell h1 {
+    font-size: clamp(1.5rem, 6.4vw, 2rem);
+  }
+
+  .panel-header h2,
+  .section-heading h2 {
+    font-size: clamp(1.2rem, 5vw, 1.55rem);
+  }
+
+  .panchang-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dasha-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .dasha-button-list {
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  .panchang-search input,
+  .auth-form input,
+  .kundali-form input,
+  .kundali-form select,
+  .admin-field input,
+  .admin-field textarea {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Comfortable touch targets. */
+  .site-navbar button,
+  .nav-submenu button,
+  .primary-button,
+  .ghost-button,
+  .topbar-primary,
+  .card-button,
+  .dasha-button {
+    min-height: 44px;
+  }
+}
+
+/* ---- 560: phones ---- */
+@media (max-width: 560px) {
+  .app-shell {
+    padding: 16px 12px 32px;
+  }
+
+  .site-section {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .horoscope-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-links.split {
+    grid-template-columns: 1fr;
+  }
+
+  .astrologer-stats {
+    gap: 6px;
+  }
+
+  .astrologer-stats strong {
+    font-size: 0.92rem;
+  }
+
+  .astrologer-stats span {
+    font-size: 0.68rem;
+  }
+
+  .astrologer-actions,
+  .astrologer-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .astrologer-buttons button {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .report-section-tabs button {
+    flex: 1 1 auto;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .carousel-stage,
+  .carousel-stage img {
+    min-height: 220px;
+  }
+
+  .service-track .site-card {
+    flex-basis: 86%;
+  }
+
+  .dp-clock strong {
+    font-size: 1.5rem;
+  }
+}
+
+/* ---- 420: small phones ---- */
+@media (max-width: 420px) {
+  .app-shell {
+    padding: 14px 10px 28px;
+  }
+
+  .astrologer-top {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+
+  .astrologer-stats {
+    grid-template-columns: 1fr;
+    text-align: left;
+  }
+
+  .horoscope-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .hero,
+  .panel,
+  .chart-card,
+  .site-card {
+    border-radius: 16px;
+  }
+
+  .service-track .site-card {
+    flex-basis: 92%;
+  }
+}
+
+/* ---- respect reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---- fixes from measured overflow ---- */
+
+/* The four-column footer has no room for the subscribe/feedback inputs
+   between the 980px collapse and ~1180px: measured 29px of overflow at a
+   991px viewport. Drop to two columns through that band. */
+@media (min-width: 981px) and (max-width: 1180px) {
+  .footer-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* A fixed 300px track is wider than the content box on a 320px phone.
+   min() lets the track shrink with the container instead of overflowing. */
+.panchang-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+
+/* The send/subscribe buttons must be allowed to shrink rather than set the
+   width of their column. */
+.footer-input-row button {
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+/* Explanatory note under a form control. */
+.kundali-form .field-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* ---- match making (guna milan) ---- */
+.match-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.match-form .panel-header h2 {
+  margin: 0;
+}
+
+.match-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0 6px;
+}
+
+.match-actions .primary-button {
+  min-width: 200px;
+}
+
+.match-hint {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.match-score-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 0 18px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+
+.match-total {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.match-total strong {
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.match-total span {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.match-total-meta {
+  min-width: 0;
+}
+
+.match-percentage {
+  margin: 0;
+  font-weight: 700;
+}
+
+.match-verdict {
+  margin: 2px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  max-width: 54ch;
+}
+
+.match-partners small.match-partner-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.76rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.koota-table .num-col {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.koota-bar-cell {
+  min-width: 110px;
+}
+
+.koota-bar {
+  position: relative;
+  height: 8px;
+  width: 100%;
+  min-width: 90px;
+  background: rgba(145, 55, 24, 0.16);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.koota-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--accent);
+}
+
+.koota-bar-fill.good {
+  background: #2f6b3d;
+}
+
+.koota-bar-fill.mid {
+  background: #b5761b;
+}
+
+.koota-bar-fill.low {
+  background: #9c2b1c;
+}
+
+.koota-table tfoot td {
+  border-top: 2px solid var(--line);
+  background: rgba(255, 241, 214, 0.5);
+}
+
+@media (max-width: 980px) {
+  .match-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- compact page header (replaces the hero box on dense pages) ---- */
+.page-head {
+  margin: 4px 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.page-head h1 {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.6vw, 1.9rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.page-head p {
+  margin: 5px 0 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ---- denser form controls on the match page ----
+   The generator's 14px input padding and 16px row gaps are too heavy once two
+   full forms sit side by side, so this page runs a tighter scale. */
+.match-page .kundali-form,
+.generate-page .kundali-form {
+  gap: 11px;
+}
+
+.match-page .kundali-form label,
+.generate-page .kundali-form label {
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.match-page .kundali-form input,
+.match-page .kundali-form select,
+.generate-page .kundali-form input,
+.generate-page .kundali-form select {
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  border-color: rgba(145, 55, 24, 0.34);
+}
+
+.match-page .two-col,
+.match-page .manual-grid,
+.generate-page .two-col,
+.generate-page .manual-grid {
+  gap: 10px;
+}
+
+.match-page .panel,
+.generate-page .panel {
+  padding: 18px 18px 20px;
+  border-radius: 14px;
+}
+
+.match-page .panel-header,
+.generate-page .panel-header {
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line-soft, rgba(145, 55, 24, 0.18));
+}
+
+.match-page .panel-header h2,
+.generate-page .panel-header h2 {
+  font-size: 1.12rem;
+  margin: 0;
+}
+
+.match-page .panel-header .eyebrow,
+.generate-page .panel-header .eyebrow {
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 3px;
+}
+
+.match-page .place-summary,
+.generate-page .place-summary {
+  padding: 7px 10px;
+  font-size: 0.78rem;
+  border-radius: 4px;
+}
+
+.match-page .suggestion-item,
+.generate-page .suggestion-item {
+  padding: 8px 10px;
+  font-size: 0.85rem;
+}
+
+.match-page .match-grid {
+  gap: 14px;
+}
+
+.match-page .primary-button,
+.generate-page .primary-button {
+  padding: 10px 22px;
+  border-radius: 6px;
+}
+
+/* Result panel reads as data, not as a banner. */
+.match-page .match-total strong {
+  font-size: 2rem;
+}
+
+.match-page .koota-table th,
+.match-page .koota-table td {
+  padding: 8px 11px;
+  font-size: 0.85rem;
+}
+
+/* ---- almanac section tables ---- */
+.almanac-table td.cell-ok {
+  color: #2f6b3d;
+  font-weight: 600;
+}
+
+.almanac-table td.cell-warn {
+  color: #9c2b1c;
+  font-weight: 600;
+}
+
+.almanac-page .panel {
+  padding: 18px;
+}
+
+/* ---- shared place picker ---- */
+.place-picker {
+  position: relative;
+  margin: 0 0 16px;
+  max-width: 560px;
+}
+
+.place-picker > label span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.place-picker-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.place-picker-current {
+  font-size: 0.95rem;
+}
+
+.place-picker-row input {
+  flex: 1 1 200px;
+  min-width: 0;
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 0.86rem;
+  color: var(--text);
+  background: rgba(255, 241, 214, 0.97);
+  border: 1px solid rgba(145, 55, 24, 0.34);
+  border-radius: 4px;
+}
+
+.place-picker-suggestions {
+  position: absolute;
+  z-index: 30;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  background: #fff1d6;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: var(--shadow);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.place-picker-suggestions button {
+  display: block;
+  width: 100%;
+  padding: 9px 12px;
+  font: inherit;
+  font-size: 0.86rem;
+  text-align: left;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.place-picker-suggestions button:hover {
+  background: rgba(166, 0, 0, 0.1);
+}
+
+/* ---- grouped almanac sections (day / night) ---- */
+.almanac-group + .almanac-group {
+  margin-top: 22px;
+}
+
+.almanac-group-title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--accent-strong);
+}
+
+/* ---- almanac controls: place + date navigation ---- */
+.almanac-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 18px 26px;
+  margin-bottom: 16px;
+}
+
+.almanac-controls .place-picker {
+  margin: 0;
+  flex: 1 1 280px;
+}
+
+.date-nav {
+  flex: 0 1 auto;
+}
+
+.date-nav > label span {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.date-nav-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-nav-row button {
+  padding: 7px 12px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+  background: rgba(255, 241, 214, 0.97);
+  border: 1px solid rgba(145, 55, 24, 0.34);
+  border-radius: 4px;
+  cursor: pointer;
+  min-height: 36px;
+}
+
+.date-nav-row button:hover {
+  color: #fff1d6;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.date-nav-row input[type="date"] {
+  padding: 6px 9px;
+  font: inherit;
+  font-size: 0.84rem;
+  color: var(--text);
+  background: rgba(255, 241, 214, 0.97);
+  border: 1px solid rgba(145, 55, 24, 0.34);
+  border-radius: 4px;
+}
+
+/* ---- day / night group headings ---- */
+.almanac-group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.group-icon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.almanac-group-title .group-icon {
+  fill: none;
+}
+
+/* The moon is a filled crescent; the sun is a stroked disc with rays. */
+.almanac-group-title svg path {
+  fill: currentColor;
+  stroke: none;
+}
+
+.planet-glyph {
+  display: inline-block;
+  width: 1.3em;
+  font-size: 1.05em;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+/* ---- three-way tone: green good, red avoid, blue neutral ---- */
+.almanac-table tr.tone-good td:first-child,
+.almanac-table tr.tone-good td:nth-child(2) {
+  color: #1f6b3a;
+  font-weight: 600;
+}
+
+.almanac-table tr.tone-bad td:first-child,
+.almanac-table tr.tone-bad td:nth-child(2) {
+  color: #a32b17;
+  font-weight: 600;
+}
+
+.almanac-table tr.tone-neutral td:first-child,
+.almanac-table tr.tone-neutral td:nth-child(2) {
+  color: #1e4f80;
+  font-weight: 600;
+}
+
+.almanac-table tr.tone-good {
+  background: rgba(31, 107, 58, 0.07);
+}
+
+.almanac-table tr.tone-bad {
+  background: rgba(163, 43, 23, 0.08);
+}
+
+.almanac-table tr.tone-neutral {
+  background: rgba(30, 79, 128, 0.07);
+}
+
+@media (max-width: 560px) {
+  .almanac-controls {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .date-nav-row {
+    width: 100%;
+  }
+
+  .date-nav-row input[type="date"] {
+    flex: 1 1 130px;
+    min-width: 0;
+  }
+}
+
+/* ==========================================================================
+   CHOGHADIYA PAGE
+   ========================================================================== */
+
+.cg-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  margin-bottom: 12px;
+  color: #fff1d6;
+  background: linear-gradient(135deg, #6b6a1f, #8a8428);
+  border-radius: 8px;
+}
+
+.cg-banner-title {
+  margin: 0 0 6px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  opacity: 0.92;
+}
+
+.cg-current {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cg-banner .cg-current.tone-good { color: #b7f5c4; }
+.cg-banner .cg-current.tone-bad { color: #ffb3a0; }
+.cg-banner .cg-current.tone-neutral { color: #b7d8ff; }
+
+.cg-current-time {
+  margin: 3px 0 0;
+  font-size: 0.92rem;
+}
+
+.cg-countdown {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.cg-place {
+  margin: 6px 0 0;
+  font-size: 0.86rem;
+  opacity: 0.9;
+}
+
+.cg-banner-date {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.cg-banner-date strong {
+  font-size: 2rem;
+  text-decoration: underline;
+}
+
+.cg-banner-date span {
+  font-size: 0.86rem;
+}
+
+/* ---- month and day strips ---- */
+.cg-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.cg-strip button {
+  min-width: 34px;
+  padding: 5px 9px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff1d6;
+  background: #8a5a2a;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cg-strip button:hover {
+  background: var(--accent);
+}
+
+.cg-strip button.active {
+  background: #6b6a1f;
+}
+
+.cg-days button {
+  min-width: 30px;
+  padding: 4px 6px;
+}
+
+.cg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px 26px;
+  margin: 14px 0 12px;
+}
+
+.cg-controls .place-picker {
+  margin: 0;
+  flex: 1 1 260px;
+}
+
+.cg-datetab {
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff1d6;
+  background: linear-gradient(135deg, #6b6a1f, #8a8428);
+  border-radius: 6px;
+}
+
+/* ---- the two columns ---- */
+.cg-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
+  padding: 12px;
+  background: rgba(255, 209, 135, 0.55);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.cg-column-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 2px 10px;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.cg-col-title.day { color: #9c4a00; }
+.cg-col-title.night { color: #5a3a86; }
+.cg-col-sun { color: var(--accent-strong); font-size: 0.86rem; }
+
+.cg-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 8px;
+  margin-bottom: 7px;
+  align-items: stretch;
+}
+
+.cg-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 11px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff1d6;
+  border-radius: 4px;
+}
+
+.cg-name.tone-good { background: #2f7a3f; }
+.cg-name.tone-bad { background: #a8321c; }
+.cg-name.tone-neutral { background: #3c5a86; }
+
+.cg-lamp { font-size: 0.95em; opacity: 0.9; }
+
+.cg-time {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 9px 11px;
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  background: rgba(255, 241, 214, 0.9);
+  border-radius: 4px;
+}
+
+.cg-row.running .cg-time {
+  outline: 2px solid #6b6a1f;
+}
+
+.cg-rahu {
+  padding: 1px 7px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #fff1d6;
+  background: #3c5a86;
+  border-radius: 99px;
+}
+
+.cg-note {
+  margin: 14px 0 10px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.cg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.cg-legend li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.cg-legend .swatch {
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.cg-legend .swatch.tone-good { background: #2f7a3f; }
+.cg-legend .swatch.tone-bad { background: #a8321c; }
+.cg-legend .swatch.tone-neutral { background: #3c5a86; }
+.cg-legend .swatch-rahu { background: #3c5a86; opacity: 0.6; }
+
+@media (max-width: 760px) {
+  .cg-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .cg-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .cg-row {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+}
+
+/* ---- choghadiya icons (drawn here, not borrowed) ---- */
+.cg-icon {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+}
+
+.cg-icon .flame {
+  fill: #ffcf5c;
+}
+
+.cg-icon .bowl {
+  fill: rgba(255, 241, 214, 0.92);
+}
+
+.cg-icon-rahu {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
+.cg-icon-rahu circle {
+  fill: currentColor;
+  stroke: none;
+}
+
+.cg-rahu {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---- clock format toggle ---- */
+.cg-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+
+.cg-modes button {
+  padding: 6px 16px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: rgba(255, 241, 214, 0.85);
+  border: 1px solid rgba(145, 55, 24, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cg-modes button:hover {
+  color: var(--accent-strong);
+}
+
+.cg-modes button.active {
+  color: #fff1d6;
+  background: #6b6a1f;
+  border-color: #6b6a1f;
+}
+
+/* ---- hora: classical graha colours ----
+   A hora is read by its lord, so each planet carries its traditional colour
+   rather than a good/bad verdict. */
+.cg-name.tone-sun { background: #8c2f1a; }
+.cg-name.tone-moon { background: #f3ead6; color: #3a2a18; }
+.cg-name.tone-mars { background: #c0392b; }
+.cg-name.tone-mercury { background: #2f7a3f; }
+.cg-name.tone-jupiter { background: #e3c04a; color: #3a2a18; }
+.cg-name.tone-venus { background: #f7f1e2; color: #3a2a18; }
+.cg-name.tone-saturn { background: #4a4f58; }
+
+/* The pale lamps need a darker flame to stay visible. */
+.cg-name.tone-moon .cg-icon .bowl,
+.cg-name.tone-venus .cg-icon .bowl,
+.cg-name.tone-jupiter .cg-icon .bowl {
+  fill: #8a5a2a;
+}
+
+.cg-legend .swatch.tone-sun { background: #8c2f1a; }
+.cg-legend .swatch.tone-moon { background: #f3ead6; border: 1px solid var(--line); }
+.cg-legend .swatch.tone-mars { background: #c0392b; }
+.cg-legend .swatch.tone-mercury { background: #2f7a3f; }
+.cg-legend .swatch.tone-jupiter { background: #e3c04a; }
+.cg-legend .swatch.tone-venus { background: #f7f1e2; border: 1px solid var(--line); }
+.cg-legend .swatch.tone-saturn { background: #4a4f58; }
+
+/* Twelve rows a side rather than eight, so tighten them. */
+.hora-page .cg-row {
+  margin-bottom: 5px;
+}
+
+.hora-page .cg-name,
+.hora-page .cg-time {
+  padding: 7px 11px;
+}
+
+.hora-page .cg-banner .cg-current.tone-moon,
+.hora-page .cg-banner .cg-current.tone-venus,
+.hora-page .cg-banner .cg-current.tone-jupiter {
+  color: #ffe9a8;
+}
+
+.hora-page .cg-banner .cg-current.tone-mercury { color: #b7f5c4; }
+.hora-page .cg-banner .cg-current.tone-sun,
+.hora-page .cg-banner .cg-current.tone-mars { color: #ffb3a0; }
+.hora-page .cg-banner .cg-current.tone-saturn { color: #cfd6e0; }
+
+/* ==========================================================================
+   RAHU KAAL PAGE
+   ========================================================================== */
+
+.rk-banner-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.rk-badge {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+}
+
+.rk-badge-disc { fill: #e58a2b; }
+.rk-badge-mark { stroke: #2d2a18; }
+.rk-badge-mark-fill { fill: #2d2a18; }
+
+.rk-status { font-size: 1.3rem; }
+
+.rk-cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.rk-card {
+  background: rgba(255, 241, 214, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.rk-card > header {
+  padding: 9px 14px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+  background: rgba(255, 209, 135, 0.7);
+  border-bottom: 1px solid var(--line);
+}
+
+.rk-card-body {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 18px 14px;
+  text-align: center;
+}
+
+.rk-card-body .rk-badge {
+  width: 64px;
+  height: 64px;
+}
+
+.rk-time {
+  margin: 8px 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.rk-date { margin: 0; font-size: 0.9rem; }
+
+.rk-duration {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* ---- the weekday wheel ---- */
+.rk-wheel-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.rk-wheel { width: 100%; max-width: 230px; height: auto; }
+
+.rk-slice {
+  fill: #c98b2e;
+  stroke: #fff1d6;
+  stroke-width: 1.5;
+}
+
+.rk-slice.empty { fill: #e8c88a; }
+.rk-slice.today { fill: #6b4a12; }
+
+.rk-slice-label {
+  font-size: 9px;
+  font-weight: 700;
+  fill: #fff1d6;
+}
+
+.rk-wheel-end {
+  display: grid;
+  justify-items: center;
+  font-size: 1.1rem;
+  color: var(--accent-strong);
+}
+
+.rk-wheel-end small {
+  font-size: 0.64rem;
+  color: var(--muted);
+}
+
+.rk-wheel-caption {
+  margin: 8px 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  max-width: 44ch;
+}
+
+/* The retained muhurta table sits below; drop its duplicate page chrome. */
+.rk-existing .app-shell {
+  padding: 0;
+  max-width: none;
+}
+
+.rk-existing .page-head {
+  margin-top: 8px;
+}
+
+.rk-about h2 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+}
+
+.rk-about p {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  max-width: 78ch;
+}
+
+@media (max-width: 760px) {
+  .rk-cards { grid-template-columns: 1fr; }
+}
+
+/* ---- eclipse pages ---- */
+.ec-banner {
+  align-items: flex-start;
+}
+
+.ec-title {
+  margin: 0 0 8px;
+  font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+  line-height: 1.25;
+  color: #fff1d6;
+}
+
+.ec-link {
+  padding: 0;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #ffe0a8;
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ec-next {
+  margin: 0 0 18px;
+  color: var(--accent);
+}
+
+.ec-quick button {
+  padding: 7px 16px;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #fff1d6;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 241, 214, 0.5);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ec-quick button:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.ec-options {
+  display: grid;
+  gap: 8px;
+}
+
+.ec-seconds {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.ec-list.loading {
+  opacity: 0.55;
+}
+
+.ec-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+
+.ec-index button {
+  padding: 5px 12px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-strong);
+  background: rgba(255, 241, 214, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.ec-card {
+  margin-bottom: 16px;
+  background: rgba(255, 241, 214, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  scroll-margin-top: 90px;
+}
+
+.ec-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba(255, 209, 135, 0.7);
+  border-bottom: 1px solid var(--line);
+}
+
+.ec-card-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--accent-strong);
+}
+
+.ec-card-head p {
+  margin: 2px 0 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.ec-chip {
+  padding: 4px 12px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #fff1d6;
+  background: #8a5a2a;
+  border-radius: 999px;
+}
+
+.ec-chip.visible {
+  background: #2f7a3f;
+}
+
+.ec-card-body {
+  display: grid;
+  grid-template-columns: minmax(150px, 220px) minmax(0, 1fr);
+  gap: 20px;
+  padding: 18px 16px;
+}
+
+.ec-figure-col {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 8px;
+}
+
+.ec-figure {
+  width: 100%;
+  max-width: 190px;
+  height: auto;
+  background: #1c1a2e;
+  border-radius: 50%;
+}
+
+.ec-sun { fill: #f6b93b; }
+.ec-corona { fill: rgba(255, 244, 214, 0.35); }
+.ec-moon-shadow { fill: #1c1a2e; }
+.ec-full-moon { fill: #f1ead6; }
+.ec-umbra { fill: rgba(150, 38, 12, 0.88); }
+.ec-penumbra { fill: rgba(60, 50, 40, 0.28); }
+.ec-moon-rim { fill: none; stroke: rgba(255, 241, 214, 0.5); stroke-width: 0.6; }
+
+.ec-figure-caption {
+  margin: 0;
+  font-size: 0.78rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.ec-timings h3 {
+  margin: 0 0 8px;
+  font-size: 0.98rem;
+  color: var(--accent-strong);
+}
+
+.ec-sutak-title {
+  margin-top: 16px !important;
+}
+
+.ec-visibility {
+  margin: 0 0 10px;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #7a2410;
+  background: rgba(168, 50, 28, 0.1);
+  border-left: 3px solid #a8321c;
+  border-radius: 3px;
+}
+
+.ec-visibility.visible {
+  color: #1f5a2c;
+  background: rgba(47, 122, 63, 0.1);
+  border-left-color: #2f7a3f;
+}
+
+.ec-rows {
+  margin: 0;
+  border: 1px solid rgba(145, 55, 24, 0.25);
+  border-radius: 4px;
+}
+
+.ec-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  padding: 7px 12px;
+  font-size: 0.88rem;
+}
+
+.ec-row:nth-child(even) {
+  background: rgba(255, 209, 135, 0.25);
+}
+
+.ec-row dt {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.ec-row dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.ec-row.max dd {
+  color: var(--accent);
+}
+
+.ec-row.horizon dt {
+  font-style: italic;
+}
+
+.ec-below {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8a5a2a;
+}
+
+.ec-about h2 {
+  margin: 16px 0 8px;
+  font-size: 1.05rem;
+}
+
+.ec-about h2:first-child {
+  margin-top: 0;
+}
+
+.ec-about p {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  max-width: 78ch;
+}
+
+.ec-related h2 {
+  margin: 18px 0 10px;
+  font-size: 1.05rem;
+}
+
+.ec-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.ec-related-card {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  background: rgba(255, 241, 214, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.ec-related-card strong {
+  color: var(--accent-strong);
+}
+
+.ec-related-card span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.ec-related-card:hover {
+  border-color: var(--accent);
+}
+
+@media (max-width: 680px) {
+  .ec-card-body { grid-template-columns: 1fr; }
+  .ec-row { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* ---- equinox and solstice pages (share the eclipse card styles) ---- */
+.ss-siblings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ss-siblings button {
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff1d6;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 241, 214, 0.5);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.ss-siblings button:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.ss-year-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.ss-year-pick input {
+  width: 78px;
+  padding: 4px 6px;
+  font: inherit;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+}
+
+.ss-datebox {
+  display: grid;
+  justify-items: center;
+  line-height: 1.25;
+  color: var(--accent-strong);
+}
+
+.ss-datebox strong {
+  font-size: 1.6rem;
+}
+
+.ss-datebox span {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.ss-headline {
+  margin: 0 0 10px;
+  font-size: 0.92rem;
+}
+
+.ec-card.loading {
+  opacity: 0.55;
+}
+
+.ss-dial {
+  width: 100%;
+  max-width: 190px;
+  height: auto;
+}
+
+.ss-night { fill: #2a2848; }
+.ss-day { fill: #f6b93b; }
+.ss-hub { fill: #fff1d6; }
+.ss-hub-big { font-size: 11px; font-weight: 700; fill: var(--accent-strong); }
+.ss-hub-small { font-size: 6.5px; fill: var(--muted); }
+.ss-marker { fill: #a60000; stroke: #fff1d6; stroke-width: 1.5; }
+.ss-tick { font-size: 7px; font-weight: 700; fill: var(--muted); }
+
+.ss-next {
+  color: var(--accent);
+}
+
+/* ---- purnima and amavasya lists ---- */
+.ld-countdown {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #ffe0a8;
+}
+
+.ld-countdown strong {
+  font-size: 1.15rem;
+  color: #fff1d6;
+}
+
+.ld-list.loading { opacity: 0.55; }
+
+.ld-entry {
+  display: grid;
+  grid-template-columns: minmax(170px, 230px) minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  background: rgba(255, 241, 214, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.ld-entry.today {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(166, 0, 0, 0.15);
+}
+
+.ld-date {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ld-date strong {
+  display: block;
+  font-size: 0.98rem;
+  color: var(--accent-strong);
+}
+
+.ld-date span {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.ld-moon { width: 38px; height: 38px; flex: none; }
+.ld-full { fill: #f4ecd2; stroke: #c9a24a; stroke-width: 2; }
+.ld-new { fill: #2a2848; stroke: #6b6a1f; stroke-width: 2; }
+
+.ld-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.ld-paksha {
+  margin: 4px 0 6px;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.ld-times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+.ld-times div { display: flex; gap: 6px; }
+.ld-times dt { color: var(--muted); font-weight: 600; }
+.ld-times dt::after { content: " -"; }
+.ld-times dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ---- asta, vakri and gochara ---- */
+.pe-hub h2 {
+  margin: 14px 0 8px;
+  font-size: 1.05rem;
+}
+
+.pe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.pe-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: left;
+  color: var(--accent-strong);
+  background: rgba(255, 241, 214, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pe-card:hover { border-color: var(--accent); }
+
+.pe-card.active {
+  color: #fff1d6;
+  background: #6b6a1f;
+  border-color: #6b6a1f;
+}
+
+.pe-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  font-size: 1rem;
+  line-height: 1;
+  color: #fff1d6;
+  background: #8a5a2a;
+  border-radius: 50%;
+}
+
+.pe-surya { background: #c0392b; }
+.pe-chandra { background: #f3ead6; color: #3a2a18; border: 1px solid var(--line); }
+.pe-mangal { background: #a8321c; }
+.pe-budha { background: #2f7a3f; }
+.pe-guru { background: #e3c04a; color: #3a2a18; }
+.pe-shukra { background: #f7f1e2; color: #3a2a18; border: 1px solid var(--line); }
+.pe-shani { background: #3c4a66; }
+.pe-rahu, .pe-ketu { background: #4a4f58; }
+.pe-arun, .pe-varun, .pe-yama { background: #3c5a86; }
+
+.pe-detail {
+  margin-top: 20px;
+  scroll-margin-top: 90px;
+}
+
+.pe-detail .cg-datetab {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pe-entries,
+.pe-transits {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pe-entry {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 241, 214, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.pe-number {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff1d6;
+  background: #8a5a2a;
+  border-radius: 50%;
+}
+
+.pe-total,
+.pe-starts {
+  margin: 6px 0 10px;
+  font-size: 0.9rem;
+}
+
+.pe-transits {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+}
+
+.pe-transit {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 241, 214, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.pe-transit > div {
+  display: grid;
+  gap: 2px;
+  font-size: 0.86rem;
+}
+
+.pe-transit strong { color: var(--accent-strong); font-size: 0.95rem; }
+
+.pe-transit.current {
+  border-color: #2f7a3f;
+  background: rgba(225, 245, 228, 0.95);
+}
+
+.pe-vakri { color: #a8321c; font-weight: 600; }
+
+.pe-now {
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-style: normal;
+  color: #1f5a2c;
+}
+
+/* ---- planetary positions ---- */
+.pp-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+}
+
+.pp-options label:not(.ec-seconds) {
+  display: grid;
+  gap: 3px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.pp-options select,
+.pp-datetime {
+  padding: 5px 8px;
+  font: inherit;
+  font-size: 0.86rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fffaf0;
+}
+
+.ss-year-pick .pp-datetime { width: auto; }
+
+.pp-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 14px;
+}
+
+.pp-legend {
+  margin-top: 10px;
+}
+
+.pp-table td,
+.pp-table th {
+  white-space: nowrap;
+  font-size: 0.84rem;
+}
+
+.pp-table td {
+  font-variant-numeric: tabular-nums;
+}
+
+.pp-name {
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.pp-alt td {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.pp-cards-title {
+  margin-top: 16px;
+}
+
+.pp-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+.pp-card-body {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+}
+
+.pp-card-body div {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.pp-card-body dt { color: var(--muted); font-weight: 600; }
+.pp-card-body dd { margin: 0; font-weight: 700; text-align: right; }
+
+@media (max-width: 760px) {
+  .ld-entry { grid-template-columns: 1fr; gap: 8px; }
+  .pp-top { grid-template-columns: 1fr; }
+}
+
+/* ---- photographs and illustrations ---- */
+.photo-credit {
+  display: block;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.photo-credit a {
+  color: inherit;
+}
+
+/* Credit laid over a photo banner or slide. */
+.photo-credit.on-banner {
+  position: absolute;
+  right: 12px;
+  bottom: 6px;
+  max-width: calc(100% - 24px);
+  padding: 2px 8px;
+  text-align: right;
+  color: rgba(255, 241, 214, 0.88);
+  background: rgba(30, 10, 0, 0.45);
+  border-radius: 6px;
+}
+
+/* A page banner with a photograph behind it; the gradient keeps the text legible. */
+.cg-banner.with-photo,
+.page-head.with-photo {
+  position: relative;
+  min-height: 170px;
+  padding-bottom: 34px;
+  color: #fff1d6;
+  background:
+    linear-gradient(90deg, rgba(45, 12, 0, 0.9) 0%, rgba(45, 12, 0, 0.62) 55%, rgba(45, 12, 0, 0.28) 100%),
+    var(--photo) center / cover no-repeat;
+}
+
+.page-head.with-photo {
+  padding: 22px 24px 34px;
+  border: 0;
+  border-radius: 8px;
+}
+
+.page-head.with-photo p {
+  color: rgba(255, 241, 214, 0.9);
+}
+
+.photo-figure {
+  margin: 0;
+}
+
+.photo-figure img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.photo-figure figcaption {
+  margin-top: 4px;
+}
+
+/* Hero blocks with art beside the heading. */
+.hero.has-art {
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 300px);
+  align-items: center;
+}
+
+.hero.has-art > div,
+.hero.has-art > .hero-copy {
+  grid-column: 1;
+}
+
+.hero.has-art .hero-art {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  width: 100%;
+}
+
+.hero.has-art figure.hero-art img {
+  aspect-ratio: 4 / 3;
+}
+
+.zodiac-art {
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.auth-photo img {
+  height: 150px;
+}
+
+.auth-photo {
+  margin-bottom: 14px;
+}
+
+@media (max-width: 760px) {
+  .hero.has-art {
+    grid-template-columns: 1fr;
+  }
+
+  .hero.has-art .hero-art {
+    grid-column: 1;
+    grid-row: auto;
+    max-width: 320px;
   }
 }

@@ -14,8 +14,22 @@ import type { AuthUser } from "./auth";
 import AuthPage, { type LoginFormState, type SignupFormState } from "./components/AuthPage";
 import ComingSoonPage from "./components/ComingSoonPage";
 import HomePage from "./components/HomePage";
+import AlmanacPage, { ALMANAC_ROUTES } from "./components/AlmanacPage";
+import ChoghadiyaPage from "./components/ChoghadiyaPage";
+import HoraPage from "./components/HoraPage";
+import RahuKaalPage from "./components/RahuKaalPage";
+import EclipsePage from "./components/EclipsePage";
+import SeasonPage from "./components/SeasonPage";
+import LunarDaysPage from "./components/LunarDaysPage";
+import PlanetEventsPage from "./components/PlanetEventsPage";
+import PlanetPositionsPage from "./components/PlanetPositionsPage";
+import MatchMakingPage from "./components/MatchMakingPage";
+import NotFoundPage from "./components/NotFoundPage";
+import AdminApp from "./admin/AdminApp";
 import ResultsPanel from "./components/ResultsPanel";
 import SiteChrome from "./components/SiteChrome";
+import SiteFooter from "./components/SiteFooter";
+import ZodiacPage from "./components/ZodiacPage";
 import {
   buildPath,
   humanizeSlug,
@@ -28,8 +42,11 @@ import {
   type AppRoute
 } from "./routes";
 import type { SitePage } from "./siteContent";
+import { findZodiacSign, withZodiacOverride, ZODIAC_SIGNS } from "./zodiac";
+import { useSiteContent } from "./useSiteContent";
 import type {
   Ayanamsha,
+  Gender,
   KundaliReport,
   Meridiem,
   PlaceSuggestion,
@@ -38,9 +55,11 @@ import type {
   Source
 } from "./types";
 import { canGenerateFromPlace, effectivePrecision, isValidTime12h } from "./utils";
+import { PhotoFigure, useImageSlot } from "./components/Photo";
 
 type FormState = {
   name: string;
+  gender: Gender;
   birthDate: string;
   birthTime12h: string;
   meridiem: Meridiem;
@@ -49,6 +68,7 @@ type FormState = {
 
 const INITIAL_FORM: FormState = {
   name: "",
+  gender: "OTHER",
   birthDate: "",
   birthTime12h: "",
   meridiem: "AM",
@@ -56,6 +76,8 @@ const INITIAL_FORM: FormState = {
 };
 
 function App() {
+  const generateArt = useImageSlot("page.generate", "brihajjataka");
+  const siteContent = useSiteContent();
   const [route, setRoute] = useState<AppRoute>(() => parseRoute(window.location.pathname));
   const [pendingRoute, setPendingRoute] = useState<AppRoute | null>(null);
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
@@ -450,6 +472,7 @@ function App() {
       setGenerating(true);
       const createdReport = await createReport({
         name: form.name.trim(),
+        gender: form.gender,
         birthDate: form.birthDate,
         birthTime12h: form.birthTime12h,
         meridiem: form.meridiem,
@@ -491,8 +514,9 @@ function App() {
   };
 
   const renderGeneratePage = () => (
-    <div className="app-shell">
-      <div className="hero">
+    <div className="app-shell generate-page">
+      <div className="hero has-art">
+        <PhotoFigure image={generateArt} className="hero-art" />
         <div>
           <p className="eyebrow">Kundali Generator</p>
           <h1>Generate a precise North India birth chart.</h1>
@@ -518,6 +542,27 @@ function App() {
                 onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))}
                 placeholder="Enter full name"
               />
+            </label>
+
+            <label>
+              <span>Gender</span>
+              <select
+                value={form.gender}
+                onChange={(event) =>
+                  setForm((current) => ({
+                    ...current,
+                    gender: event.target.value as Gender
+                  }))
+                }
+              >
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Prefer not to say</option>
+              </select>
+              <small className="field-note">
+                Sets the kalatra karaka (Shukra for a male chart, Guru for a female one).
+                Positions, charts and dasha are astronomical and do not change.
+              </small>
             </label>
 
             <div className="place-search" ref={placeSearchRef}>
@@ -701,11 +746,11 @@ function App() {
 
         <section className="preview-panel">
           <div className="placeholder panel">
-            <p className="eyebrow">Backend-Controlled Application</p>
-            <h2>Auth, sessions, and reports now belong to the API.</h2>
+            <p className="eyebrow">Swiss Ephemeris</p>
+            <h2>Charts are cast from real planetary positions.</h2>
             <p>
-              Protected report URLs are backed by the database and the current backend session, not
-              browser-managed users.
+              Positions come from the Swiss Ephemeris at your exact birth moment and resolved
+              coordinates, with your chosen ayanamsha applied.
             </p>
           </div>
         </section>
@@ -786,7 +831,13 @@ function App() {
   if (!authResolved) {
     return (
       <div className="site-shell">
-        <SiteChrome currentUser={null} page={routeToSitePage(route)} onNavigate={goToPage} onLogout={() => {}} />
+        <SiteChrome
+          currentUser={null}
+          page={routeToSitePage(route)}
+          onNavigate={goToPage}
+          onLogout={() => {}}
+          navItems={siteContent.navItems}
+        />
         <main className="app-shell">
           <section className="panel">
             <p className="eyebrow">Loading Session</p>
@@ -817,13 +868,103 @@ function App() {
     ) {
       return currentUser ? renderReportPage() : renderAuthPage("login");
     }
+    if (route.name === "admin") {
+      // Handled by the early return above, which renders the panel without site
+      // chrome. This branch exists so the union narrows for the cases below.
+      return null;
+    }
+    if (route.name === "not-found") {
+      // A nav item added in the admin panel produces a /sections/ slug the static
+      // router cannot know about, so check the live nav list before calling it a
+      // 404. Without this, every nav item added through the CMS would 404.
+      const sectionSlug = route.path.startsWith("/sections/")
+        ? route.path.slice("/sections/".length)
+        : "";
+      const matchesNavItem =
+        sectionSlug !== "" &&
+        siteContent.navItems.some(
+          (item) => slugify(item.comingSoonTitle ?? item.label) === sectionSlug
+        );
+      if (matchesNavItem) {
+        return <ComingSoonPage title={humanizeSlug(sectionSlug)} />;
+      }
+      return <NotFoundPage path={route.path} onGoHome={() => navigate({ name: "home" })} />;
+    }
+    if (route.slug === "match-making") {
+      return <MatchMakingPage />;
+    }
+    if (route.slug === "chaughadiya") {
+      return <ChoghadiyaPage />;
+    }
+    if (route.slug === "hora") {
+      return <HoraPage />;
+    }
+    if (route.slug === "rahu-kalam") {
+      return <RahuKaalPage />;
+    }
+    const goTo = (path: string) => navigate(parseRoute(path));
+    if (route.slug === "full-moon-dates" || route.slug === "new-moon-dates") {
+      return <LunarDaysPage kind={route.slug === "full-moon-dates" ? "purnima" : "amavasya"} onNavigate={goTo} />;
+    }
+    if (route.slug === "planetary-positions") {
+      return <PlanetPositionsPage onNavigate={goTo} />;
+    }
+    if (route.slug === "graha-asta-uday") {
+      return <PlanetEventsPage mode="asta" onNavigate={goTo} />;
+    }
+    if (route.slug === "graha-vakri-margi") {
+      return <PlanetEventsPage mode="vakri" onNavigate={goTo} />;
+    }
+    if (route.slug === "graha-gochara") {
+      return <PlanetEventsPage mode="gochara" onNavigate={goTo} />;
+    }
+    if (
+      route.slug === "vernal-equinox" ||
+      route.slug === "summer-solstice" ||
+      route.slug === "autumnal-equinox" ||
+      route.slug === "winter-solstice"
+    ) {
+      return <SeasonPage event={route.slug} onNavigate={(path) => navigate(parseRoute(path))} />;
+    }
+    if (route.slug === "solar-eclipse" || route.slug === "lunar-eclipse") {
+      return (
+        <EclipsePage
+          kind={route.slug === "solar-eclipse" ? "solar" : "lunar"}
+          onNavigate={(path) => navigate(parseRoute(path))}
+        />
+      );
+    }
+    // Any slug the almanac registry knows is rendered by the one generic table
+    // page rather than by a component per section.
+    const almanacRoute = ALMANAC_ROUTES[route.slug];
+    if (almanacRoute) {
+      return <AlmanacPage route={almanacRoute} />;
+    }
+    // The homepage links each rashi to /sections/<sign>-horoscope, so a zodiac
+    // slug resolves to the reference page and anything else stays a placeholder.
+    const zodiacSign = findZodiacSign(route.slug);
+    if (zodiacSign) {
+      return (
+        <ZodiacPage
+          sign={withZodiacOverride(zodiacSign, siteContent.zodiacOverride(zodiacSign.slug))}
+          allSigns={ZODIAC_SIGNS}
+          onSelectSign={(slug) => navigate({ name: "coming-soon", slug: `${slug}-horoscope` })}
+        />
+      );
+    }
     return <ComingSoonPage title={humanizeSlug(route.slug)} />;
   };
+
+  // The admin panel is its own surface - no site chrome, no public session.
+  if (route.name === "admin") {
+    return <AdminApp onExit={() => navigate({ name: "home" })} />;
+  }
 
   return (
     <div className="site-shell">
       <SiteChrome
         currentUser={currentUser}
+        navItems={siteContent.navItems}
         page={routeToSitePage(route)}
         onNavigate={goToPage}
         onLogout={() => {
@@ -831,6 +972,18 @@ function App() {
         }}
       />
       {renderCurrentPage()}
+      <SiteFooter
+        description={siteContent.text(
+          "footer.description",
+          "We illuminate the pathways of your life through the celestial wisdom of astrology. Our astrologers combine classical Vedic knowledge with modern insight to give you readings you can act on."
+        )}
+        copyright={siteContent.text(
+          "footer.copyright",
+          `Copyright © ${new Date().getFullYear()}, All Rights Reserved.`
+        )}
+        version={siteContent.text("footer.version", "1.0.0")}
+        onNavigate={(path) => navigate(parseRoute(path))}
+      />
     </div>
   );
 }

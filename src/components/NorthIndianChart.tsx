@@ -6,6 +6,12 @@ interface NorthIndianChartProps {
   divisionalCharts?: DivisionalChartEntry[];
   selectedChartKey?: string;
   onSelectChart?: (chartKey: string) => void;
+  /** Overrides the heading when the card shows a fixed chart rather than a chosen one. */
+  eyebrow?: string;
+  title?: string;
+  focus?: string;
+  /** Companion cards in a chart row are fixed, so they render without the picker. */
+  showSelector?: boolean;
 }
 
 const HOUSE_POSITIONS: Record<number, { x: number; y: number }> = {
@@ -47,7 +53,11 @@ export function NorthIndianChart({
   chart,
   divisionalCharts,
   selectedChartKey,
-  onSelectChart
+  onSelectChart,
+  eyebrow = "Birth Chart",
+  title,
+  focus,
+  showSelector = true
 }: NorthIndianChartProps) {
   const chartOptions = useMemo<DivisionalChartEntry[]>(
     () =>
@@ -71,25 +81,27 @@ export function NorthIndianChart({
     <div className="chart-card">
       <div className="chart-heading">
         <div>
-          <p className="eyebrow">Birth Chart</p>
-          <h3>North India Style</h3>
+          <p className="eyebrow">{eyebrow}</p>
+          <h3>{title ?? "North India Style"}</h3>
         </div>
         <div className="chart-controls">
           <p className="chart-meta">Ascendant: {selectedChart.chart.ascendantSignName}</p>
-          <label className="chart-selector">
-            <span>Select Chart</span>
-            <select
-              value={selectedChart?.key ?? chartOptions[0]?.key ?? "D1"}
-              onChange={(event) => onSelectChart?.(event.target.value)}
-            >
-              {chartOptions.map((option) => (
-                <option key={option.key} value={option.key}>
-                  {option.title}
-                </option>
-              ))}
-            </select>
-          </label>
-          <p className="chart-submeta">{selectedChart?.focus}</p>
+          <p className="chart-submeta">{focus ?? selectedChart?.focus}</p>
+          {showSelector && (
+            <label className="chart-selector">
+              <span>Select Chart</span>
+              <select
+                value={selectedChart?.key ?? chartOptions[0]?.key ?? "D1"}
+                onChange={(event) => onSelectChart?.(event.target.value)}
+              >
+                {chartOptions.map((option) => (
+                  <option key={option.key} value={option.key}>
+                    {option.title}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
         </div>
       </div>
 

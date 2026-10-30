@@ -1,3 +1,5 @@
+import { PHOTOS } from "./photos";
+
 export type SitePage = "home" | "generate" | "login" | "signup" | "coming-soon";
 
 export type NavItem = {
@@ -5,6 +7,8 @@ export type NavItem = {
   page: SitePage;
   requiresAuth?: boolean;
   comingSoonTitle?: string;
+  /** Blank/absent for a top-level item; otherwise the parent's label. */
+  parentLabel?: string;
 };
 
 export type CardContent = {
@@ -30,58 +34,32 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "More 5", page: "coming-soon", comingSoonTitle: "More 5" }
 ];
 
-function svgImage(title: string, subtitle: string, from: string, to: string): string {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460">
-      <defs>
-        <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stop-color="${from}"/>
-          <stop offset="100%" stop-color="${to}"/>
-        </linearGradient>
-        <radialGradient id="glow" cx="30%" cy="25%" r="70%">
-          <stop offset="0%" stop-color="#fff5de" stop-opacity="0.88"/>
-          <stop offset="100%" stop-color="#fff5de" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <rect width="900" height="460" fill="url(#bg)"/>
-      <rect width="900" height="460" fill="url(#glow)"/>
-      <circle cx="720" cy="105" r="82" fill="#fff3d5" opacity="0.25"/>
-      <circle cx="760" cy="360" r="150" fill="#3b1b10" opacity="0.16"/>
-      <path d="M90 360 L220 190 L350 360 Z" fill="none" stroke="#fff8ea" stroke-width="5" opacity="0.42"/>
-      <path d="M550 360 L680 190 L810 360 Z" fill="none" stroke="#fff8ea" stroke-width="5" opacity="0.35"/>
-      <text x="70" y="205" font-family="Georgia, serif" font-size="64" font-weight="700" fill="#fff8ea">${title}</text>
-      <text x="74" y="260" font-family="Georgia, serif" font-size="25" fill="#fff8ea" opacity="0.86">${subtitle}</text>
-    </svg>
-  `;
-
-  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
-}
 
 export const HERO_SLIDES: CardContent[] = [
   {
     title: "Birth Chart",
     text: "North India style kundali with precise ascendant and planetary details.",
-    image: svgImage("Birth Chart", "Know your planetary blueprint", "#8d4128", "#d19a48")
+    image: PHOTOS["brihajjataka"].src
   },
   {
     title: "Match-Making",
     text: "Prepare for compatibility tools, guna matching, and relationship insights.",
-    image: svgImage("Match-Making", "Compatibility insights coming soon", "#6b351e", "#bd6b38")
+    image: PHOTOS["wedding-fire"].src
   },
   {
     title: "Daily Horoscope",
     text: "A dedicated horoscope experience will be connected from this homepage.",
-    image: svgImage("Horoscope", "Twelve signs, one cosmic story", "#4d3825", "#c08d52")
+    image: PHOTOS["night-sky"].src
   },
   {
     title: "Lal Kitab",
     text: "Future remedial astrology pages can plug into this navigation.",
-    image: svgImage("Lal Kitab", "Remedies and guidance coming soon", "#76301d", "#c79a62")
+    image: PHOTOS["puja-offerings"].src
   },
   {
     title: "Western Astrology",
     text: "Reserve space for tropical charts and western-style interpretations.",
-    image: svgImage("Western", "A new astrology section for later", "#59341f", "#a86438")
+    image: PHOTOS["prague-clock"].src
   }
 ];
 
@@ -89,37 +67,138 @@ export const SERVICE_CARDS: CardContent[] = [
   {
     title: "Generate Kundali",
     text: "Create an accurate North India birth chart using resolved coordinates and timezone.",
-    image: svgImage("Kundali", "D1 to D60 varga chart support", "#8d4128", "#c5803d"),
+    image: "/images/services/kundali.svg",
     actionLabel: "Open Generator"
   },
   {
     title: "Match-Making",
     text: "A future space for compatibility, guna milan, and marriage guidance.",
-    image: svgImage("Match", "Compatibility tools", "#6a321c", "#bb7543")
+    image: "/images/services/match-making.svg"
   },
   {
     title: "Horoscope",
     text: "Daily, weekly, and monthly horoscope pages can be added here.",
-    image: svgImage("Signs", "Zodiac guidance", "#5b3a24", "#c59857")
+    image: "/images/services/horoscope.svg"
   },
   {
     title: "Astrology",
     text: "Build detailed astrology learning, predictions, and consultation pages.",
-    image: svgImage("Astrology", "Planetary wisdom", "#7f3b27", "#c2854b")
+    image: "/images/services/astrology.svg"
   },
   {
     title: "Occult",
     text: "A dedicated section for numerology, tarot, and occult topics later.",
-    image: svgImage("Occult", "Mystic studies", "#432d22", "#9b6740")
+    image: "/images/services/occult.svg"
+  },
+  {
+    title: "Lal Kitab",
+    text: "Remedial astrology with its own house rules, debts, and practical upaya.",
+    image: "/images/services/lal-kitab.svg"
+  },
+  {
+    title: "Western Astrology",
+    text: "Tropical charts, aspects, and western-style interpretation alongside Vedic.",
+    image: "/images/services/western-astrology.svg"
+  },
+  {
+    title: "Panchang",
+    text: "Daily tithi, nakshatra, yoga, karana, and muhurat for choosing the right moment.",
+    image: "/images/services/panchang.svg"
   }
 ];
 
-export const ASTROLOGER_CARDS: CardContent[] = Array.from({ length: 10 }, (_, index) => ({
-  title: `Astrologer ${index + 1}`,
-  text: "Profile, expertise, rating, and booking link can be connected here later.",
-  image: svgImage(`Astro ${index + 1}`, "Expert profile placeholder", "#744027", "#d2a05d"),
-  actionLabel: "View Profile"
-}));
+export type Astrologer = {
+  name: string;
+  avatar: string;
+  languages: string[];
+  skills: string[];
+  rating: number;
+  experienceYears: number;
+  orders: number;
+  pricePerMinute: number;
+  trending: boolean;
+  online: boolean;
+  /** Admin toggles. Optional so the bundled fallback data stays valid. */
+  isFree?: boolean;
+  chatEnabled?: boolean;
+  callEnabled?: boolean;
+};
+
+
+export const ASTROLOGERS: Astrologer[] = [
+  {
+    name: "Astro Rajneesh",
+    avatar: "/images/astrologers/rajneesh.svg",
+    languages: ["Hindi", "English", "Punjabi"],
+    skills: ["Vedic", "Numerology", "Tarot", "Vastu", "KP", "Prashna"],
+    rating: 4.0,
+    experienceYears: 5,
+    orders: 2045,
+    pricePerMinute: 6,
+    trending: true,
+    online: true
+  },
+  {
+    name: "Astro Uttam",
+    avatar: "/images/astrologers/uttam.svg",
+    languages: ["Hindi", "English"],
+    skills: ["Vedic", "Numerology", "Vastu", "KP", "Prashna"],
+    rating: 4.0,
+    experienceYears: 5,
+    orders: 2965,
+    pricePerMinute: 10,
+    trending: true,
+    online: true
+  },
+  {
+    name: "Astro Vasudha",
+    avatar: "/images/astrologers/vasudha.svg",
+    languages: ["Hindi", "English"],
+    skills: ["Vedic", "Numerology", "Tarot", "Vastu", "KP", "Prashna"],
+    rating: 5.0,
+    experienceYears: 4,
+    orders: 1452,
+    pricePerMinute: 12,
+    trending: true,
+    online: true
+  },
+  {
+    name: "Astro Meera",
+    avatar: "/images/astrologers/meera.svg",
+    languages: ["Hindi", "Marathi", "English"],
+    skills: ["Vedic", "Lal Kitab", "Prashna", "Muhurat"],
+    rating: 4.5,
+    experienceYears: 9,
+    orders: 5310,
+    pricePerMinute: 15,
+    trending: false,
+    online: true
+  },
+  {
+    name: "Astro Kartik",
+    avatar: "/images/astrologers/kartik.svg",
+    languages: ["Hindi", "English", "Bengali"],
+    skills: ["KP", "Vedic", "Vastu", "Numerology"],
+    rating: 4.2,
+    experienceYears: 7,
+    orders: 3188,
+    pricePerMinute: 9,
+    trending: false,
+    online: false
+  },
+  {
+    name: "Astro Sharada",
+    avatar: "/images/astrologers/sharada.svg",
+    languages: ["Hindi", "Telugu", "English"],
+    skills: ["Vedic", "Tarot", "Numerology", "Muhurat", "Prashna"],
+    rating: 4.8,
+    experienceYears: 12,
+    orders: 7642,
+    pricePerMinute: 20,
+    trending: true,
+    online: true
+  }
+];
 
 export const HOROSCOPE_SIGNS: CardContent[] = [
   "Aries",
@@ -137,5 +216,81 @@ export const HOROSCOPE_SIGNS: CardContent[] = [
 ].map((sign) => ({
   title: sign,
   text: `${sign} horoscope`,
-  image: svgImage(sign, "Click to open later", "#6d3b25", "#c28a4b")
+  image: `/images/zodiac/${sign.toLowerCase()}.svg`
 }));
+
+export type FooterLink = {
+  label: string;
+  /** An app route. When absent the link resolves to /sections/<slug>. */
+  route?: string;
+};
+
+export type FooterGroup = {
+  title: string;
+  /** Rendered as two side-by-side columns under one heading. */
+  split?: boolean;
+  links: FooterLink[];
+};
+
+export const FOOTER_GROUPS: FooterGroup[] = [
+  {
+    title: "Useful Links",
+    split: true,
+    links: [
+      { label: "Free Kundli", route: "/generate" },
+      { label: "Kundli Matching" },
+      { label: "Panchang" },
+      { label: "Numerology" },
+      { label: "Horoscope" },
+      { label: "Astrologer Registration" },
+      { label: "Vedic" },
+      { label: "Tarot" },
+      { label: "Yearly Festival Calendar" },
+      { label: "Blogs" },
+      { label: "Astrologer Login", route: "/login" }
+    ]
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About Us" },
+      { label: "Contact Us" },
+      { label: "Terms & Conditions" },
+      { label: "Privacy Policy" },
+      { label: "Disclaimer" },
+      { label: "Refund & Cancellation Policy" }
+    ]
+  },
+  {
+    title: "Horoscope",
+    links: [
+      { label: "Horoscope 2026" },
+      { label: "Yesterday's Horoscope" },
+      { label: "Today's Horoscope" },
+      { label: "Tomorrow's Horoscope" },
+      { label: "Monthly Horoscope" },
+      { label: "Yearly Horoscope" }
+    ]
+  }
+];
+
+export const SOCIAL_LINKS = [
+  { label: "WhatsApp", href: "https://wa.me/" },
+  { label: "Facebook", href: "https://facebook.com/" },
+  { label: "LinkedIn", href: "https://linkedin.com/" },
+  { label: "Instagram", href: "https://instagram.com/" },
+  { label: "YouTube", href: "https://youtube.com/" }
+];
+
+/** Every /sections/ slug the footer can produce, so the router does not 404 them. */
+export const FOOTER_SECTION_SLUGS = FOOTER_GROUPS.flatMap((group) =>
+  group.links
+    .filter((link) => !link.route)
+    .map((link) =>
+      link.label
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+    )
+);
