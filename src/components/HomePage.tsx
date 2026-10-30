@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { HOROSCOPE_SIGNS, type SitePage } from "../siteContent";
 import { useSiteContent } from "../useSiteContent";
 import PanchangSection from "./PanchangSection";
+import { ImageCredit, imageAt, resolveSlot } from "./Photo";
 
 type HomePageProps = {
   onNavigate: (page: SitePage, title?: string) => void;
@@ -107,12 +108,16 @@ function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
 
       <section className="carousel-section" aria-label="Featured astrology services">
         <div className="carousel-stage">
-          <img src={HERO_SLIDES[activeSlide].image} alt={HERO_SLIDES[activeSlide].title} />
+          <img
+            src={HERO_SLIDES[activeSlide].image}
+            alt={imageAt(HERO_SLIDES[activeSlide].image, HERO_SLIDES[activeSlide].title).alt}
+          />
           <div className="carousel-caption">
             <p className="eyebrow">Featured</p>
             <h2>{HERO_SLIDES[activeSlide].title}</h2>
             <p>{HERO_SLIDES[activeSlide].text}</p>
           </div>
+          <ImageCredit image={imageAt(HERO_SLIDES[activeSlide].image)} className="on-banner" />
         </div>
         <div className="carousel-controls">
           <button
@@ -333,7 +338,7 @@ function HomePage({ onNavigate, onShowComingSoon }: HomePageProps) {
               type="button"
               onClick={() => onShowComingSoon(`${sign.title} Horoscope`)}
             >
-              <img src={sign.image} alt={sign.title} />
+              <img src={resolveSlot(content, `zodiac.${sign.title.toLowerCase()}`, { src: sign.image, alt: sign.title }).src} alt={sign.title} />
               <span>{sign.title}</span>
             </button>
           ))}

@@ -191,6 +191,36 @@ const SPECS: ContentSpec[] = [
     ]
   },
   {
+    kind: "page-images",
+    title: "Page images",
+    description:
+      "Every picture on the site that is not part of the sections above: page banners, zodiac tiles and page art. Upload a new image to replace one. Clear it to go back to the built-in image.",
+    titleField: "label",
+    fields: [
+      {
+        name: "key",
+        label: "Slot",
+        type: "text",
+        lockedAfterCreate: true,
+        help: "The page looks the image up by this key, so it cannot be changed."
+      },
+      { name: "label", label: "Where it appears", type: "text" },
+      {
+        name: "imageUrl",
+        label: "Image",
+        type: "image",
+        help: "Wide images suit banners. Clear to show the built-in image again."
+      },
+      {
+        name: "credit",
+        label: "Credit",
+        type: "text",
+        help: "Optional line shown under your image, e.g. 'Photo: Ravi Kumar'. The built-in photos show their own credit automatically."
+      },
+      ...COMMON
+    ]
+  },
+  {
     kind: "subscribers",
     title: "Subscribers",
     description: "Email addresses collected by the footer subscribe box. Collected from visitors rather than authored, so these are listed and deleted here, not written.",

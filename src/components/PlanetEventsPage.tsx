@@ -9,6 +9,7 @@ import type {
 import { ClockModes, YearStrip, placeDateTime, readQuery, writeQuery } from "./astroControls";
 import type { ClockMode } from "./EclipsePage";
 import PlacePicker, { loadStoredPlace, type PickedPlace } from "./PlacePicker";
+import { ImageCredit, bannerProps, useImageSlot } from "./Photo";
 
 export type PlanetEventMode = "asta" | "vakri" | "gochara";
 
@@ -202,6 +203,7 @@ export function PlanetEventsPage({
   mode: PlanetEventMode;
   onNavigate: (path: string) => void;
 }) {
+  const banner = useImageSlot(`banner.${PATHS[pageMode].slice("/sections/".length)}`, pageMode === "gochara" ? "navagraha" : "solar-system");
   const copy = COPY[pageMode];
   const available = PLANETS[pageMode];
   const [place, setPlace] = useState<PickedPlace>(() => loadStoredPlace());
@@ -266,7 +268,7 @@ export function PlanetEventsPage({
 
   return (
     <main className="app-shell choghadiya-page planet-events-page">
-      <header className="cg-banner ec-banner">
+      <header className={`cg-banner ec-banner ${bannerProps(banner).className}`} style={bannerProps(banner).style}>
         <div>
           <p className="cg-banner-title">Astrology Events &rsaquo; {copy.crumb}</p>
           <h1 className="ec-title">{copy.title}</h1>
@@ -283,6 +285,7 @@ export function PlanetEventsPage({
               </button>
             ))}
         </nav>
+        <ImageCredit image={banner} className="on-banner" />
       </header>
 
       {pageMode === "gochara" ? (
