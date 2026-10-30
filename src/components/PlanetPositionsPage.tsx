@@ -3,6 +3,7 @@ import { fetchPlanetPositions } from "../api";
 import type { Chart, PlanetPositions } from "../types";
 import NorthIndianChart from "./NorthIndianChart";
 import PlacePicker, { loadStoredPlace, type PickedPlace } from "./PlacePicker";
+import { ImageCredit, bannerProps, useImageSlot } from "./Photo";
 
 type Ayanamsha = PlanetPositions["ayanamsha"];
 type LongitudeFormat = "dms" | "degrees";
@@ -70,6 +71,7 @@ function signed(value: number): string {
 }
 
 export function PlanetPositionsPage({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const banner = useImageSlot("banner.planetary-positions", "solar-system");
   const [place, setPlace] = useState<PickedPlace>(() => loadStoredPlace());
   const [at, setAt] = useState(() => nowAt(loadStoredPlace().timezone));
   const [ayanamsha, setAyanamsha] = useState<Ayanamsha>("lahiri");
@@ -123,7 +125,7 @@ export function PlanetPositionsPage({ onNavigate }: { onNavigate: (path: string)
 
   return (
     <main className="app-shell choghadiya-page planet-positions-page">
-      <header className="cg-banner ec-banner">
+      <header className={`cg-banner ec-banner ${bannerProps(banner).className}`} style={bannerProps(banner).style}>
         <div>
           <p className="cg-banner-title">Astrology &rsaquo; Planetary Positions</p>
           <h1 className="ec-title">
@@ -136,6 +138,7 @@ export function PlanetPositionsPage({ onNavigate }: { onNavigate: (path: string)
           <button type="button" onClick={() => onNavigate("/sections/graha-vakri-margi")}>Planet Retrograde</button>
           <button type="button" onClick={() => onNavigate("/sections/graha-asta-uday")}>Planet Combustion</button>
         </nav>
+        <ImageCredit image={banner} className="on-banner" />
       </header>
 
       <nav className="cg-strip ec-years" aria-label="Day">

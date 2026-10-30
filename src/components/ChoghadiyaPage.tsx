@@ -2,6 +2,7 @@ import { fetchChoghadiya } from "../api";
 import DayTablePage, { type DayTableConfig } from "./DayTablePage";
 
 const CONFIG: DayTableConfig = {
+  imageSlot: "banner.chaughadiya",
   bannerTitle: "Aaj Ka Choghadiya",
   dayTitle: "Day Choghadiya",
   nightTitle: "Night Choghadiya",

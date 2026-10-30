@@ -20,7 +20,8 @@ export type ContentKind =
   | "feedback"
   | "festivals"
   | "planetary-events"
-  | "rashifal";
+  | "rashifal"
+  | "page-images";
 
 /** Every content row carries these; the rest varies by kind. */
 export type ContentRow = {

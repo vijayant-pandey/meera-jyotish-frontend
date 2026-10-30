@@ -1,4 +1,5 @@
 import { DAY_BY_LORD, GEMSTONE_BY_LORD, type ZodiacSign } from "../zodiac";
+import { useImageSlot } from "./Photo";
 
 type ZodiacPageProps = {
   sign: ZodiacSign;
@@ -28,9 +29,14 @@ function Prose({ eyebrow, heading, body }: { eyebrow: string; heading: string; b
 }
 
 export function ZodiacPage({ sign, onSelectSign, allSigns }: ZodiacPageProps) {
+  const art = useImageSlot(`zodiac.${sign.slug}`, {
+    src: `/images/zodiac/${sign.slug}.svg`,
+    alt: `${sign.name} (${sign.sanskrit}) symbol`
+  });
   return (
     <main className="app-shell zodiac-page">
-      <div className="hero">
+      <div className="hero has-art">
+        <img className="hero-art zodiac-art" src={art.src} alt={art.alt} />
         <div>
           <p className="eyebrow">Vedic Rashi &middot; Sign {sign.number} of 12</p>
           <h1>

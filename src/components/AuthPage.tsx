@@ -1,5 +1,6 @@
 import type { FormEvent } from "react";
 import type { SitePage } from "../siteContent";
+import { PhotoFigure, useImageSlot } from "./Photo";
 
 export type LoginFormState = {
   identifier: string;
@@ -38,9 +39,11 @@ function AuthPage({
   onSignupFormChange,
   onNavigate
 }: AuthPageProps) {
+  const art = useImageSlot("page.auth", "night-sky");
   return (
     <main className="app-shell auth-page">
       <section className="panel auth-card">
+        <PhotoFigure image={art} className="auth-photo" />
         <p className="eyebrow">{mode === "login" ? "Login" : "Signup"}</p>
         <h1>{mode === "login" ? "Login to your account" : "Create your account"}</h1>
         <p className="auth-copy">

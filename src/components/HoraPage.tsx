@@ -4,6 +4,7 @@ import DayTablePage, { type DayTableConfig } from "./DayTablePage";
 /** A hora is read by its lord, so the swatches are the classical graha colours
  *  rather than an auspicious/inauspicious verdict. */
 const CONFIG: DayTableConfig = {
+  imageSlot: "banner.hora",
   bannerTitle: "Running Hora",
   dayTitle: "Day Hora",
   nightTitle: "Night Hora",
